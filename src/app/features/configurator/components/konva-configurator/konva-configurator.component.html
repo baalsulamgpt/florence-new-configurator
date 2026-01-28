@@ -1,0 +1,622 @@
+<div class="konva-page">
+  <!-- Main Header (60px) -->
+  <header class="main-header">
+      <div class="header-content">
+          <img class="florence-logo" src="https://mailboxconfigurator.com/sites/default/files/florence_logo_0.png" alt="Florence Logo">
+          <div class="project-title-section">
+              <span class="project-title" *ngIf="!editingProjectName; else editNameTemplate">{{ currentProject?.name || 'Unnamed Project' }}</span>
+              <ng-template #editNameTemplate>
+                  <input
+                      #projectNameInput
+                      type="text"
+                      class="project-title-input"
+                      [value]="currentProject?.name || 'Unnamed Project'"
+                      (blur)="finishEditingProjectName()"
+                      (keydown.enter)="finishEditingProjectName()"
+                      (keydown.escape)="cancelEditingProjectName()"
+                      (click)="$event.stopPropagation()"
+                  />
+              </ng-template>
+              <button class="btn-edit-title" (click)="startEditingProjectName()" title="Edit project name">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                  </svg>
+              </button>
+          </div>
+
+          <div class="spacer"></div>
+
+          <button class="header-btn" (click)="openProjectSettings()">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m5.08 5.08l4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08-5.08l4.24-4.24"/>
+              </svg>
+              <span>Project Settings</span>
+          </button>
+
+          <button class="header-btn">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+              <span>Comments</span>
+          </button>
+
+          <button class="header-btn">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <path d="M12 18v-6"/>
+                  <path d="M9 15h6"/>
+              </svg>
+              <span>Create PDF</span>
+          </button>
+
+          <button class="header-btn">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 3l8 4.5v9l-8 4-8-4v-9z"/>
+                  <path d="M12 12l8-4.5"/>
+                  <path d="M12 12v8"/>
+                  <path d="M12 12L4 7.5"/>
+              </svg>
+              <span>Create Revit Model</span>
+          </button>
+
+          <button class="header-btn" (click)="openShareModal()">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="18" cy="5" r="3"/>
+                  <circle cx="6" cy="12" r="3"/>
+                  <circle cx="18" cy="19" r="3"/>
+                  <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                  <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+              </svg>
+              <span>Share</span>
+          </button>
+
+          <!-- User Avatar Menu -->
+          <div class="user-menu-container">
+              <button class="user-avatar-btn" (click)="toggleUserMenu()">
+                  <span class="user-initials">{{ getUserInitials() }}</span>
+                  <svg class="dropdown-arrow" [class.rotated]="isUserMenuOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="6 9 12 15 18 9"/>
+                  </svg>
+              </button>
+
+              <div class="user-dropdown" *ngIf="isUserMenuOpen" (click)="$event.stopPropagation()">
+                  <div class="user-info">
+                      <span class="user-email">{{ currentUserEmail }}</span>
+                      <span class="user-role">Administrator</span>
+                  </div>
+                  <div class="dropdown-divider"></div>
+                  <button class="dropdown-item" (click)="goToProjects()">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                          <polyline points="9 22 9 12 15 12 15 22"/>
+                      </svg>
+                      <span>Back to All Projects</span>
+                  </button>
+                  <div class="dropdown-divider"></div>
+                  <button class="dropdown-item" (click)="onLogout()">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                          <polyline points="16 17 21 12 16 7"/>
+                          <line x1="21" y1="12" x2="9" y2="12"/>
+                      </svg>
+                      <span>Logout</span>
+                  </button>
+              </div>
+          </div>
+      </div>
+  </header>
+
+  <div class="canvas-area">
+      <!-- Canvas Info Panel -->
+      <div class="canvas-info-panel" *ngIf="canvasStats">
+          <div class="breadcrumb-section">
+              <span class="breadcrumb-level">{{ activeLevelName }}</span>
+              <svg class="breadcrumb-separator" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"/>
+              </svg>
+              <span class="breadcrumb-wall">{{ activeWallName }}</span>
+          </div>
+          <div class="stats-section">
+              <span class="stat-item"><span class="stat-dot"></span>Tenants: {{ canvasStats.tenantCabinets }}</span>
+              <span class="stat-item"><span class="stat-dot"></span>Parcels: {{ canvasStats.parcelCabinets }}</span>
+              <span class="stat-item"><span class="stat-dot"></span>Size: {{ canvasStats.maxWidth }}" × {{ canvasStats.maxHeight }}"</span>
+          </div>
+      </div>
+
+      <div #container class="konva-container">
+        <input #inlineInput
+             type="text"
+             class="inline-editor"
+             placeholder="Enter #"
+             [style.top.px]="inputPosition.y"
+             [style.left.px]="inputPosition.x"
+             [style.width.px]="inputPosition.width"
+             [style.height.px]="inputPosition.height"
+             [style.display]="editingDoor ? 'block' : 'none'"
+             [(ngModel)]="inputValue"
+             (blur)="finishEditing()"
+             (keydown.enter)="finishEditing()"
+             (keydown.escape)="cancelEditing()">
+      </div>
+  </div>
+
+  <!-- Right Panel: Levels & Walls -->
+  <aside class="panel panel-right" [class.hidden]="!rightPanelVisible">
+      <div class="panel-header">
+          <div class="panel-title-section">
+              <svg class="panel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 21h18M5 21V7l8-4 8 4v14M8 21v-2a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+              </svg>
+              <h2 class="panel-title">Floors & Walls</h2>
+          </div>
+          <button class="btn-add-level" (click)="addLevel()" title="Add new floor">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="5" x2="12" y2="19"/>
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              <span>Add Floor</span>
+          </button>
+      </div>
+      <div class="panel-content">
+          <div class="level-list">
+              <ng-container *ngFor="let level of levels$ | async">
+                  <!-- Level Card -->
+                  <div
+                      class="level-card"
+                      [class.active]="level.level_id === (activeLevelId$ | async)"
+                  >
+                      <!-- Level Header -->
+                      <div class="level-header">
+                          <div class="level-main" (click)="toggleLevelExpanded(level.level_id)">
+                              <svg class="level-chevron" [class.expanded]="level.expanded !== false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                  <polyline points="9 18 15 12 9 6"/>
+                              </svg>
+                              <svg class="level-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                  <path d="M3 21h18M5 21V7l8-4 8 4v14"/>
+                                  <polyline points="10 9 9 9 8 9"/>
+                                  <polyline points="15 9 14 9 13 9"/>
+                              </svg>
+                              <ng-container *ngIf="editingLevelId === level.level_id; else levelNameDisplay">
+                                  <input
+                                      #levelInput
+                                      type="text"
+                                      class="level-name-input"
+                                      [value]="level.level_name"
+                                      (blur)="finishEditLevel(level.level_id, levelInput)"
+                                      (keydown)="onLevelInputKeydown($event, level.level_id, levelInput)"
+                                      (click)="$event.stopPropagation()"
+                                  />
+                              </ng-container>
+                              <ng-template #levelNameDisplay>
+                                  <span class="level-name">{{ level.level_name }}</span>
+                              </ng-template>
+                              <div class="badge badge-walls">{{ level.walls.length }}</div>
+                          </div>
+
+                          <!-- Level Actions Menu -->
+                          <div class="actions-menu" (click)="$event.stopPropagation()">
+                              <button
+                                  class="action-btn"
+                                  (click)="toggleLevelActions(level.level_id)"
+                                  [class.active]="activeActionsMenu === 'level-' + level.level_id"
+                              >
+                                  <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                                      <circle cx="12" cy="5" r="1.5"/>
+                                      <circle cx="12" cy="12" r="1.5"/>
+                                      <circle cx="12" cy="19" r="1.5"/>
+                                  </svg>
+                              </button>
+                              <div
+                                  class="actions-dropdown"
+                                  *ngIf="activeActionsMenu === 'level-' + level.level_id"
+                                  (click)="$event.stopPropagation()"
+                              >
+                                  <button class="action-item" (click)="startEditLevel(level.level_id)">
+                                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                      </svg>
+                                      Rename
+                                  </button>
+                                  <button class="action-item" (click)="addWall(level.level_id)">
+                                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                          <line x1="12" y1="5" x2="12" y2="19"/>
+                                          <line x1="5" y1="12" x2="19" y2="12"/>
+                                      </svg>
+                                      Add Wall
+                                  </button>
+                                  <button
+                                      class="action-item action-item-danger"
+                                      *ngIf="level.level_id !== 0"
+                                      (click)="removeLevel(level.level_id)"
+                                  >
+                                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                          <polyline points="3 6 5 6 21 6"/>
+                                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                      </svg>
+                                      Delete Floor
+                                  </button>
+                              </div>
+                          </div>
+                      </div>
+
+                      <!-- Walls List -->
+                      <div class="walls-container" *ngIf="level.expanded !== false">
+                          <div
+                              *ngFor="let wall of level.walls; let i = index"
+                              class="wall-card"
+                              [class.active]="wall.wall_id === (activeWallId$ | async)"
+                              (click)="setActiveWall(wall.wall_id)"
+                          >
+                              <div class="wall-header">
+                                  <div class="wall-main">
+                                      <svg class="wall-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                          <rect x="4" y="4" width="16" height="16" rx="2"/>
+                                          <line x1="4" y1="12" x2="20" y2="12"/>
+                                      </svg>
+                                      <ng-container *ngIf="editingWallId === wall.wall_id; else wallNameDisplay">
+                                          <input
+                                              #wallInput
+                                              type="text"
+                                              class="wall-name-input"
+                                              [value]="wall.wall_name ? wall.wall_name : 'Wall ' + (i + 1)"
+                                              (blur)="finishEditWall(level.level_id, wall.wall_id, wallInput)"
+                                              (keydown)="onWallInputKeydown($event, level.level_id, wall.wall_id, wallInput)"
+                                              (click)="$event.stopPropagation()"
+                                          />
+                                      </ng-container>
+                                      <ng-template #wallNameDisplay>
+                                          <span class="wall-name">{{ wall.wall_name ? wall.wall_name : 'Wall ' + (i + 1) }}</span>
+                                      </ng-template>
+                                  </div>
+
+                                  <!-- Wall Actions Menu -->
+                                  <div class="wall-actions-menu" (click)="$event.stopPropagation()">
+                                      <button
+                                          class="action-btn-sm"
+                                          (click)="toggleWallActions(wall.wall_id)"
+                                          [class.active]="activeActionsMenu === 'wall-' + wall.wall_id"
+                                      >
+                                          <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                                              <circle cx="12" cy="5" r="1.5"/>
+                                              <circle cx="12" cy="12" r="1.5"/>
+                                              <circle cx="12" cy="19" r="1.5"/>
+                                          </svg>
+                                      </button>
+                                      <div
+                                          class="actions-dropdown actions-dropdown-sm"
+                                          *ngIf="activeActionsMenu === 'wall-' + wall.wall_id"
+                                          (click)="$event.stopPropagation()"
+                                      >
+                                          <button class="action-item" (click)="startEditWall(wall.wall_id)">
+                                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                              </svg>
+                                              Rename
+                                          </button>
+                                          <button
+                                              class="action-item action-item-danger"
+                                              *ngIf="wall.wall_id !== (activeWallId$ | async) && level.walls.length > 1"
+                                              (click)="removeWall(level.level_id, wall.wall_id)"
+                                          >
+                                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                  <polyline points="3 6 5 6 21 6"/>
+                                                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                              </svg>
+                                              Delete Wall
+                                          </button>
+                                      </div>
+                                  </div>
+                              </div>
+
+                              <!-- Wall Statistics -->
+                              <div class="wall-stats" *ngIf="!editingWallId || editingWallId !== wall.wall_id">
+                                  <ng-container *ngIf="wall | wallStats as stats">
+                                      <div class="stat-row">
+                                          <span class="stat-label">Cabinets:</span>
+                                          <span class="stat-value">{{ stats.totalCabinets }}</span>
+                                      </div>
+                                      <div class="stat-row">
+                                          <span class="stat-label">Tenants:</span>
+                                          <span class="stat-value">
+                                              {{ stats.tenantCabinets }}
+                                              <span class="stat-badge" *ngIf="stats.tenantRange">{{ stats.tenantRange }}</span>
+                                          </span>
+                                      </div>
+                                      <div class="stat-row">
+                                          <span class="stat-label">Parcels:</span>
+                                          <span class="stat-value">
+                                              {{ stats.parcelCabinets }}
+                                              <span class="stat-badge" *ngIf="stats.parcelRange">{{ stats.parcelRange }}</span>
+                                          </span>
+                                      </div>
+                                      <div class="stat-row">
+                                          <span class="stat-label">Size:</span>
+                                          <span class="stat-value">{{ stats.maxWidth }}" × {{ stats.maxHeight }}"</span>
+                                      </div>
+                                  </ng-container>
+                              </div>
+                          </div>
+
+                          <!-- Add Wall Button -->
+                          <button
+                              class="btn-add-wall"
+                              (click)="addWall(level.level_id)"
+                          >
+                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                  <line x1="12" y1="5" x2="12" y2="19"/>
+                                  <line x1="5" y1="12" x2="19" y2="12"/>
+                              </svg>
+                              <span>Add Wall</span>
+                          </button>
+                      </div>
+                  </div>
+              </ng-container>
+          </div>
+      </div>
+  </aside>
+
+  <!-- Cabinets Preview Footer (3rd from bottom) -->
+  <div class="cabinets-preview-footer" *ngIf="isCabinetsMode">
+      <div class="cabinets-preview-content">
+          <div *ngFor="let cabinet of getSelectedCabinets()" class="cabinet-preview-card" draggable="true" (dragstart)="onDragStart($event, cabinet)">
+              <svg class="cabinet-preview-svg"
+                   [attr.viewBox]="getCabinetViewBox(cabinet)"
+                   [attr.width]="getCabinetViewBox(cabinet).split(' ')[2]"
+                   [attr.height]="getCabinetViewBox(cabinet).split(' ')[3]"
+                   preserveAspectRatio="xMidYMid meet">
+                  <!-- Cabinet body - minimal gray -->
+                  <rect [attr.x]="getCabinetBodyX(cabinet)"
+                        [attr.y]="getCabinetBodyY(cabinet)"
+                        [attr.width]="getCabinetBodyWidth(cabinet)"
+                        [attr.height]="getCabinetBodyHeight(cabinet)"
+                        fill="#e8eaed"
+                        stroke="#cfd8dc"
+                        stroke-width="1"/>
+                  <!-- Left Column Doors -->
+                  <ng-container *ngIf="cabinet.leftColumn">
+                      <ng-container *ngFor="let door of cabinet.leftColumn; let i = index">
+                          <!-- MDSD: Composite door - render as two parts (MD top, SD bottom) -->
+                          <ng-container *ngIf="door.toLowerCase() === 'mdsd'">
+                              <g class="cabinet-door-group">
+                                  <!-- Top half - MD (Master Door) -->
+                                  <rect [attr.x]="getCabinetDoorX(cabinet, 'left')"
+                                        [attr.y]="getDoorY(cabinet.leftColumn, i, cabinet.leftColumn.length, cabinet)"
+                                        [attr.width]="getCabinetDoorWidth(cabinet, 'left')"
+                                        [attr.height]="getDoorHeight(door, cabinet.leftColumn.length, i === cabinet.leftColumn.length - 1, cabinet) / 2"
+                                        [attr.fill]="getDoorColor('mdsd')"
+                                        [attr.rx]="isRoundDoor(door) ? '1' : '0'"
+                                        stroke="#888"
+                                        stroke-width="0.4"/>
+                                  <!-- MDSD label on top half only -->
+                                  <text [attr.x]="getCabinetDoorX(cabinet, 'left') + getCabinetDoorWidth(cabinet, 'left') / 2"
+                                        [attr.y]="getDoorY(cabinet.leftColumn, i, cabinet.leftColumn.length, cabinet) + getDoorHeight(door, cabinet.leftColumn.length, i === cabinet.leftColumn.length - 1, cabinet) / 4 + 3"
+                                        text-anchor="middle"
+                                        dominant-baseline="middle"
+                                        fill="#ffffff"
+                                        font-size="7"
+                                        font-weight="600"
+                                        font-family="sans-serif">MDSD</text>
+                                  <!-- Bottom half - SD (Single Door, no label) -->
+                                  <rect [attr.x]="getCabinetDoorX(cabinet, 'left')"
+                                        [attr.y]="getDoorY(cabinet.leftColumn, i, cabinet.leftColumn.length, cabinet) + getDoorHeight(door, cabinet.leftColumn.length, i === cabinet.leftColumn.length - 1, cabinet) / 2"
+                                        [attr.width]="getCabinetDoorWidth(cabinet, 'left')"
+                                        [attr.height]="getDoorHeight(door, cabinet.leftColumn.length, i === cabinet.leftColumn.length - 1, cabinet) / 2"
+                                        [attr.fill]="getDoorColor('mdsd')"
+                                        stroke="#888"
+                                        stroke-width="0.4"/>
+                              </g>
+                          </ng-container>
+                          <!-- Normal door -->
+                          <ng-container *ngIf="door.toLowerCase() !== 'mdsd'">
+                              <g class="cabinet-door-group">
+                                  <rect [attr.x]="getCabinetDoorX(cabinet, 'left')"
+                                        [attr.y]="getDoorY(cabinet.leftColumn, i, cabinet.leftColumn.length, cabinet)"
+                                        [attr.width]="getCabinetDoorWidth(cabinet, 'left')"
+                                        [attr.height]="getDoorHeight(door, cabinet.leftColumn.length, i === cabinet.leftColumn.length - 1, cabinet)"
+                                        [attr.fill]="getDoorColor(door)"
+                                        [attr.rx]="isRoundDoor(door) ? '1' : '0'"
+                                        stroke="#888"
+                                        stroke-width="0.4"/>
+                                  <text [attr.x]="getCabinetDoorX(cabinet, 'left') + getCabinetDoorWidth(cabinet, 'left') / 2"
+                                        [attr.y]="getDoorY(cabinet.leftColumn, i, cabinet.leftColumn.length, cabinet) + getDoorHeight(door, cabinet.leftColumn.length, i === cabinet.leftColumn.length - 1, cabinet) / 2 + 3"
+                                        text-anchor="middle"
+                                        dominant-baseline="middle"
+                                        fill="#ffffff"
+                                        font-size="7"
+                                        font-weight="600"
+                                        font-family="sans-serif">{{ getDoorLabel(door) }}</text>
+                              </g>
+                          </ng-container>
+                      </ng-container>
+                  </ng-container>
+                  <!-- Right Column Doors (only for double width) -->
+                  <ng-container *ngIf="cabinet.rightColumn && cabinet.rightColumn.length > 0">
+                      <ng-container *ngFor="let door of cabinet.rightColumn; let i = index">
+                          <!-- MDSD: Composite door - render as two parts (MD top, SD bottom) -->
+                          <ng-container *ngIf="door.toLowerCase() === 'mdsd'">
+                              <g class="cabinet-door-group">
+                                  <!-- Top half - MD (Master Door) -->
+                                  <rect [attr.x]="getCabinetDoorX(cabinet, 'right')"
+                                        [attr.y]="getDoorY(cabinet.rightColumn, i, cabinet.rightColumn.length, cabinet)"
+                                        [attr.width]="getCabinetDoorWidth(cabinet, 'right')"
+                                        [attr.height]="getDoorHeight(door, cabinet.rightColumn.length, i === cabinet.rightColumn.length - 1, cabinet) / 2"
+                                        [attr.fill]="getDoorColor('mdsd')"
+                                        [attr.rx]="isRoundDoor(door) ? '1' : '0'"
+                                        stroke="#888"
+                                        stroke-width="0.4"/>
+                                  <!-- MDSD label on top half only -->
+                                  <text [attr.x]="getCabinetDoorX(cabinet, 'right') + getCabinetDoorWidth(cabinet, 'right') / 2"
+                                        [attr.y]="getDoorY(cabinet.rightColumn, i, cabinet.rightColumn.length, cabinet) + getDoorHeight(door, cabinet.rightColumn.length, i === cabinet.rightColumn.length - 1, cabinet) / 4 + 3"
+                                        text-anchor="middle"
+                                        dominant-baseline="middle"
+                                        fill="#ffffff"
+                                        font-size="7"
+                                        font-weight="600"
+                                        font-family="sans-serif">MDSD</text>
+                                  <!-- Bottom half - SD (Single Door, no label) -->
+                                  <rect [attr.x]="getCabinetDoorX(cabinet, 'right')"
+                                        [attr.y]="getDoorY(cabinet.rightColumn, i, cabinet.rightColumn.length, cabinet) + getDoorHeight(door, cabinet.rightColumn.length, i === cabinet.rightColumn.length - 1, cabinet) / 2"
+                                        [attr.width]="getCabinetDoorWidth(cabinet, 'right')"
+                                        [attr.height]="getDoorHeight(door, cabinet.rightColumn.length, i === cabinet.rightColumn.length - 1, cabinet) / 2"
+                                        [attr.fill]="getDoorColor('mdsd')"
+                                        stroke="#888"
+                                        stroke-width="0.4"/>
+                              </g>
+                          </ng-container>
+                          <!-- Normal door -->
+                          <ng-container *ngIf="door.toLowerCase() !== 'mdsd'">
+                              <g class="cabinet-door-group">
+                                  <rect [attr.x]="getCabinetDoorX(cabinet, 'right')"
+                                        [attr.y]="getDoorY(cabinet.rightColumn, i, cabinet.rightColumn.length, cabinet)"
+                                        [attr.width]="getCabinetDoorWidth(cabinet, 'right')"
+                                        [attr.height]="getDoorHeight(door, cabinet.rightColumn.length, i === cabinet.rightColumn.length - 1, cabinet)"
+                                        [attr.fill]="getDoorColor(door)"
+                                        [attr.rx]="isRoundDoor(door) ? '1' : '0'"
+                                        stroke="#888"
+                                        stroke-width="0.4"/>
+                                  <text [attr.x]="getCabinetDoorX(cabinet, 'right') + getCabinetDoorWidth(cabinet, 'right') / 2"
+                                        [attr.y]="getDoorY(cabinet.rightColumn, i, cabinet.rightColumn.length, cabinet) + getDoorHeight(door, cabinet.rightColumn.length, i === cabinet.rightColumn.length - 1, cabinet) / 2 + 3"
+                                        text-anchor="middle"
+                                        dominant-baseline="middle"
+                                        fill="#ffffff"
+                                        font-size="7"
+                                        font-weight="600"
+                                        font-family="sans-serif">{{ getDoorLabel(door) }}</text>
+                              </g>
+                          </ng-container>
+                      </ng-container>
+                  </ng-container>
+              </svg>
+              <div class="cabinet-preview-info">
+                  <div class="cabinet-preview-title">{{ cabinet.model }}</div>
+                  <div class="cabinet-preview-subtitle">{{ cabinet.width }}"W x {{ cabinet.height }}"H</div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <!-- Cabinets Groups Footer (2nd from bottom) -->
+  <div class="cabinets-groups-footer" *ngIf="isCabinetsMode">
+      <div class="cabinets-groups-content">
+          <button *ngFor="let group of cabinetGroups"
+                  class="cabinet-group-btn"
+                  [class.active]="selectedCabinetHeight === group.rows"
+                  (click)="selectCabinetHeight(group.rows)">
+              <span class="cabinet-group-rows">{{ group.rows }} Rows</span>
+              <span class="cabinet-group-height">{{ group.height.toFixed(1) }}"</span>
+          </button>
+      </div>
+  </div>
+
+  <!-- Numbering Footer Panel -->
+  <div class="numbering-footer" *ngIf="isNumberingMode">
+      <div class="numbering-footer-content">
+          <div class="numbering-inputs">
+              <div class="numbering-input-group">
+                  <label>Tenants from:</label>
+                  <input type="number" [(ngModel)]="tenantStart" class="numbering-input">
+              </div>
+              <div class="numbering-input-group">
+                  <label>Parcels from:</label>
+                  <input type="number" [(ngModel)]="parcelStart" class="numbering-input">
+              </div>
+          </div>
+          <div class="numbering-actions">
+              <button class="numbering-btn numbering-btn-primary" (click)="updateAutoNumbering()">Update</button>
+              <button class="numbering-btn numbering-btn-secondary" (click)="resetNumbering()">Reset</button>
+          </div>
+      </div>
+  </div>
+
+  <!-- Footer Toolbar -->
+  <div class="toolbar-footer">
+      <!-- Cabinets Toggle -->
+      <button class="footer-btn" (click)="toggleCabinetsMode()" [class.active]="isCabinetsMode" title="Cabinets Panel">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <line x1="9" y1="3" x2="9" y2="21"/>
+          </svg>
+          <span>Cabinets</span>
+      </button>
+
+      <!-- Numbering Toggle -->
+      <button class="footer-btn" (click)="toggleNumberingMode()" [class.active]="isNumberingMode" title="Number Doors">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 20V10M18 20V4M6 20v-6"/>
+          </svg>
+          <span>Numbering</span>
+      </button>
+
+      <!-- Measure Toggle -->
+      <button class="footer-btn" (click)="toggleMeasureMode()" [class.active]="isMeasuringMode" title="Measure Tool">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 21l-6-6M2 10l6-6M17 4l-4 4"/>
+              <circle cx="10" cy="10" r="1"/>
+              <circle cx="4" cy="4" r="1"/>
+          </svg>
+          <span>Measure</span>
+      </button>
+
+      <!-- Color Selector -->
+      <div class="color-selector-footer">
+          <button class="footer-btn" (click)="toggleColorDropdown()" [class.active]="isColorDropdownOpen" title="Cabinet Color">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 6v6l4 2"/>
+              </svg>
+              <span>Colors</span>
+              <span class="dropdown-arrow">{{ isColorDropdownOpen ? '▼' : '▲' }}</span>
+          </button>
+          <div class="color-dropdown" *ngIf="isColorDropdownOpen">
+              <div *ngFor="let color of cabinetColors"
+                   class="color-option"
+                   [class.selected]="selectedColor === color.name"
+                   (click)="selectCabinetColor(color)">
+                  <div class="color-preview" [style.background-color]="color.hex"></div>
+                  <span class="color-name">{{ color.name }}</span>
+              </div>
+          </div>
+      </div>
+
+      <!-- Floors & Walls Toggle -->
+      <button class="footer-btn" (click)="toggleRightPanel()" [class.active]="rightPanelVisible" title="Toggle Floors & Walls Panel">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 21h18M5 21V7l8-4 8 4v14M8 21v-2a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+          </svg>
+          <span>Floors & Walls</span>
+      </button>
+  </div>
+
+  <!-- Project Settings Modal -->
+  <app-project-settings-modal
+    *ngIf="currentProject"
+    [isOpen]="isProjectSettingsOpen"
+    [project]="currentProject"
+    (close)="onProjectSettingsClose()"
+    (save)="onProjectSettingsSave($event)"
+  ></app-project-settings-modal>
+
+  <!-- Share Modal -->
+  <app-share-modal
+    *ngIf="isShareModalOpen && currentShareProject"
+    [isOpen]="isShareModalOpen"
+    [project]="currentShareProject"
+    (close)="closeShareModal()"
+    (save)="onShareSave($event)"
+  ></app-share-modal>
+
+  <!-- Cabinet Editor Modal -->
+  <app-cabinet-editor-modal
+    *ngIf="editingFrame"
+    [isOpen]="isEditorOpen"
+    [frame]="editingFrame"
+    [cabinetColor]="currentCabinetColor"
+    (close)="closeCabinetEditor()"
+    (save)="saveEditedCabinet($event)"
+  ></app-cabinet-editor-modal>
+</div>

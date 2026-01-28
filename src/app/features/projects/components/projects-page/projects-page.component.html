@@ -1,0 +1,235 @@
+<div class="projects-container">
+  <!-- Main Header (60px - same as Konva page) -->
+  <header class="main-header">
+    <div class="header-content">
+      <img class="florence-logo" src="https://mailboxconfigurator.com/sites/default/files/florence_logo_0.png" alt="Florence Logo">
+      <h1 class="page-title">My Projects</h1>
+      <div class="spacer"></div>
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Search projects..."
+        [value]="searchQuery"
+        (input)="onSearch($event)"
+      />
+      <button class="btn btn-primary" (click)="openNewProjectModal()">
+        <span class="icon">+</span> New Project
+      </button>
+
+      <!-- View Toggle -->
+      <div class="view-toggle">
+        <button
+          class="view-toggle-btn"
+          [class.active]="viewMode === 'grid'"
+          (click)="setViewMode('grid')"
+          title="Grid view"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"/>
+            <rect x="14" y="3" width="7" height="7"/>
+            <rect x="14" y="14" width="7" height="7"/>
+            <rect x="3" y="14" width="7" height="7"/>
+          </svg>
+        </button>
+        <button
+          class="view-toggle-btn"
+          [class.active]="viewMode === 'table'"
+          (click)="setViewMode('table')"
+          title="Table view"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="8" y1="6" x2="21" y2="6"/>
+            <line x1="8" y1="12" x2="21" y2="12"/>
+            <line x1="8" y1="18" x2="21" y2="18"/>
+            <line x1="3" y1="6" x2="3.01" y2="6"/>
+            <line x1="3" y1="12" x2="3.01" y2="12"/>
+            <line x1="3" y1="18" x2="3.01" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- User Avatar Menu -->
+      <div class="user-menu-container">
+        <button class="user-avatar-btn" (click)="toggleUserMenu()">
+          <span class="user-initials">{{ getUserInitials() }}</span>
+          <svg class="dropdown-arrow" [class.rotated]="isUserMenuOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </button>
+
+        <div class="user-dropdown" *ngIf="isUserMenuOpen" (click)="$event.stopPropagation()">
+          <div class="user-info">
+            <span class="user-email">{{ currentUserEmail }}</span>
+            <span class="user-role">Administrator</span>
+          </div>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item" (click)="onLogout()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            <span>Logout</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Projects Grid View -->
+  <main class="projects-main" *ngIf="filteredProjects.length > 0; else emptyState">
+    <!-- Grid View -->
+    <div class="projects-grid" *ngIf="viewMode === 'grid'">
+      <div
+        class="project-card"
+        *ngFor="let project of filteredProjects"
+        (click)="openProject(project)"
+      >
+        <div class="card-preview">
+          <div class="preview-placeholder">
+            <span class="product-type-badge">{{ getProductTypeLabel(project.productType) }}</span>
+            <span class="preview-icon">📐</span>
+          </div>
+        </div>
+        <div class="card-content">
+          <h3 class="project-name">{{ project.name }}</h3>
+          <div class="project-meta">
+            <span class="product-type">{{ getProductTypeLabel(project.productType) }}</span>
+            <span class="updated">{{ formatDate(project.updatedAt) }}</span>
+          </div>
+        </div>
+        <div class="card-actions" (click)="$event.stopPropagation()">
+          <button class="btn-icon" data-tooltip="Share" (click)="openShareModal(project, $event)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="18" cy="5" r="3"/>
+              <circle cx="6" cy="12" r="3"/>
+              <circle cx="18" cy="19" r="3"/>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+            </svg>
+          </button>
+          <button class="btn-icon" data-tooltip="Duplicate" (click)="duplicateProject(project)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+          </button>
+          <button class="btn-icon btn-icon-danger" data-tooltip="Delete" (click)="deleteProject(project, $event)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table View -->
+    <div class="projects-table" *ngIf="viewMode === 'table'">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Project Name</th>
+            <th>Product Type</th>
+            <th>Created</th>
+            <th>Last Updated</th>
+            <th class="icon-column">PDF</th>
+            <th class="icon-column">REVIT/CAD</th>
+            <th>Owner</th>
+            <th class="actions-column">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let project of filteredProjects"
+            class="table-row"
+            (click)="openProject(project)"
+          >
+            <td class="name-cell">
+              <span class="project-name-link">{{ project.name }}</span>
+            </td>
+            <td class="type-cell">
+              <span class="type-badge">{{ getProductTypeLabel(project.productType) }}</span>
+            </td>
+            <td class="date-cell">{{ formatDate(project.createdAt) }}</td>
+            <td class="date-cell">{{ formatDate(project.updatedAt) }}</td>
+            <td class="icon-cell">
+              <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <path d="M12 18v-6"/>
+                <path d="M9 15h6"/>
+              </svg>
+            </td>
+            <td class="icon-cell">
+              <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 3l8 4.5v9l-8 4-8-4v-9z"/>
+                <path d="M12 12l8-4.5"/>
+                <path d="M12 12v8"/>
+                <path d="M12 12L4 7.5"/>
+              </svg>
+            </td>
+            <td class="owner-cell">
+              <span class="owner-email" [title]="project.owner || 'Unknown'">
+                {{ project.owner || 'Unknown' }}
+              </span>
+            </td>
+            <td class="actions-cell" (click)="$event.stopPropagation()">
+              <button class="table-btn" data-tooltip="Share" (click)="openShareModal(project)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="18" cy="5" r="3"/>
+                  <circle cx="6" cy="12" r="3"/>
+                  <circle cx="18" cy="19" r="3"/>
+                  <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                  <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                </svg>
+              </button>
+              <button class="table-btn" data-tooltip="Duplicate" (click)="duplicateProject(project)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+              </button>
+              <button class="table-btn table-btn-danger" data-tooltip="Delete" (click)="deleteProject(project, $event)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"/>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Empty State -->
+  <ng-template #emptyState>
+    <div class="empty-state">
+      <div class="empty-icon">📁</div>
+      <h2>No projects yet</h2>
+      <p>Create your first project to get started with the mailbox configurator</p>
+      <button class="btn btn-primary btn-large" (click)="openNewProjectModal()">
+        <span class="icon">+</span> Create New Project
+      </button>
+    </div>
+  </ng-template>
+</div>
+
+<!-- New Project Modal -->
+<app-new-project-modal
+  *ngIf="isNewProjectModalOpen"
+  [isOpen]="isNewProjectModalOpen"
+  [currentUserEmail]="currentUserEmail"
+  (close)="closeNewProjectModal()"
+  (create)="onProjectCreated($event)"
+></app-new-project-modal>
+
+<!-- Share Modal -->
+<app-share-modal
+  *ngIf="isShareModalOpen && currentShareProject"
+  [isOpen]="isShareModalOpen"
+  [project]="currentShareProject"
+  (close)="closeShareModal()"
+  (save)="onShareSave($event)"
+></app-share-modal>

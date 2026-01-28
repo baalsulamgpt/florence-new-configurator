@@ -1,0 +1,48 @@
+<div *ngIf="isOpen" class="modal-backdrop" (click)="onBackdropClick($event)">
+  <div class="modal-container" (click)="$event.stopPropagation()" (mousedown)="$event.stopPropagation()">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h2 class="modal-title">Edit Cabinet - {{ frame.frame_id }}</h2>
+      <button class="btn-close" (click)="onClose()" title="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body">
+      <!-- Cabinet Preview Section -->
+      <div class="cabinet-section">
+        <div class="cabinet-preview-wrapper">
+          <div #cabinetCanvas id="cabinetCanvas" class="cabinet-canvas"></div>
+        </div>
+      </div>
+
+      <!-- Doors Palette Section -->
+      <div class="palette-section">
+        <div class="tabs-header">
+          <button
+            *ngFor="let category of categories"
+            class="tab-btn"
+            [class.active]="selectedCategory === category"
+            (click)="selectCategory(category)"
+          >
+            {{ category }}
+          </button>
+        </div>
+        
+        <div class="palette-wrapper">
+          <div #paletteCanvas id="paletteCanvas" class="palette-canvas"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+      <button class="btn btn-cancel" (click)="onClose()">Cancel</button>
+      <button class="btn btn-primary" (click)="onSave()" [disabled]="!canSave()">Save Changes</button>
+    </div>
+  </div>
+</div>

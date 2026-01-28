@@ -1,0 +1,23 @@
+<div class="custom-dropdown" [class.disabled]="disabled">
+  <button
+    class="dropdown-trigger"
+    (click)="toggle()"
+    [disabled]="disabled"
+    type="button"
+  >
+    <span *ngIf="showColorIndicators" class="color-indicator" [style.background-color]="getSelectedColor()"></span>
+    <span class="selected-text">{{ getSelectedLabel() }}</span>
+  </button>
+
+  <div class="dropdown-menu" *ngIf="isOpen" (click)="$event.stopPropagation()">
+    <div
+      *ngFor="let option of options"
+      class="dropdown-item"
+      [class.selected]="option.value === selectedValue"
+      (click)="selectOption(option.value)"
+    >
+      <span *ngIf="showColorIndicators" class="color-indicator" [style.background-color]="option.color"></span>
+      <span class="option-label">{{ option.label }}</span>
+    </div>
+  </div>
+</div>

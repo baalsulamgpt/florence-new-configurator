@@ -1,0 +1,138 @@
+<div class="modal-backdrop" *ngIf="isOpen" (click)="onBackdropClick($event)">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h2 class="modal-title">Project Settings</h2>
+      <button class="btn-close" (click)="onCancel()" title="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body">
+      <!-- Project Information -->
+      <div class="settings-section">
+        <h3 class="section-title">Project Information</h3>
+
+        <div class="form-group">
+          <label>Project Name</label>
+          <input type="text" class="form-input" [(ngModel)]="projectName" placeholder="My Project">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Project Type</label>
+            <app-custom-dropdown [options]="projectTypeOptions" [(ngModel)]="projectType"></app-custom-dropdown>
+          </div>
+
+          <div class="form-group">
+            <label>Delivery Mode</label>
+            <app-custom-dropdown [options]="deliveryModeOptions" [(ngModel)]="deliveryMode" (selectionChange)="onDeliveryModeChange()"></app-custom-dropdown>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>ADA Mode</label>
+            <app-custom-dropdown [options]="adaModeOptions" [(ngModel)]="adaMode"></app-custom-dropdown>
+          </div>
+
+          <div class="form-group">
+            <label>Install Type</label>
+            <app-custom-dropdown [options]="installTypeOptions" [(ngModel)]="installType" [disabled]="deliveryMode === 'usps'"></app-custom-dropdown>
+          </div>
+        </div>
+      </div>
+
+      <!-- Installation Options -->
+      <div class="settings-section">
+        <h3 class="section-title">Installation Options</h3>
+
+        <div class="form-group">
+          <label>Cabinet Color</label>
+          <app-custom-dropdown [options]="colorOptions" [(ngModel)]="suiteColorValue" [showColorIndicators]="true"></app-custom-dropdown>
+        </div>
+
+        <div class="form-group" *ngIf="installType === 'depot'">
+          <label>Depot Color</label>
+          <app-custom-dropdown [options]="depotColorOptions" [(ngModel)]="depotColor"></app-custom-dropdown>
+        </div>
+
+        <div class="form-group">
+          <label>Door ID Type</label>
+          <app-custom-dropdown [options]="idTypeOptions" [(ngModel)]="suiteIdType"></app-custom-dropdown>
+        </div>
+
+        <div class="form-group">
+          <label>Numbering Instructions</label>
+          <textarea class="form-textarea" [(ngModel)]="numberingInstructions" placeholder="Optional numbering instructions..."></textarea>
+        </div>
+      </div>
+
+      <!-- Contact Information -->
+      <div class="settings-section">
+        <h3 class="section-title">Contact Information</h3>
+
+        <div class="form-group">
+          <label>Project Email</label>
+          <input type="email" class="form-input" [(ngModel)]="projectEmail" placeholder="project@example.com">
+        </div>
+
+        <div class="form-group">
+          <label>Project Address</label>
+          <input type="text" class="form-input" [(ngModel)]="projectAddress" placeholder="123 Main St">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>City</label>
+            <input type="text" class="form-input" [(ngModel)]="projectCity" placeholder="City">
+          </div>
+
+          <div class="form-group">
+            <label>State</label>
+            <input type="text" class="form-input" [(ngModel)]="projectState" placeholder="ST">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Dealer Name</label>
+            <input type="text" class="form-input" [(ngModel)]="dealerName" placeholder="Optional">
+          </div>
+
+          <div class="form-group">
+            <label>Architect Name</label>
+            <input type="text" class="form-input" [(ngModel)]="architectName" placeholder="Optional">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Drawn By</label>
+            <input type="text" class="form-input" [(ngModel)]="drawnBy" placeholder="Optional">
+          </div>
+
+          <div class="form-group">
+            <label>PO Number</label>
+            <input type="text" class="form-input" [(ngModel)]="poNumber" placeholder="Optional">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Quote Number</label>
+          <input type="text" class="form-input" [(ngModel)]="quoteNumber" placeholder="Optional">
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+      <button class="btn btn-cancel" (click)="onCancel()">Cancel</button>
+      <button class="btn btn-primary" (click)="onSave()">Save Changes</button>
+    </div>
+  </div>
+</div>

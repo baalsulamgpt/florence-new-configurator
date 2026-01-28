@@ -1,0 +1,232 @@
+<xml>
+<installation max_vitem_cols="1" max_vitem_rows="4" wtotal="20" app_mode="standard" product_type="4C" install_type="recessed" type="mounted_wall" loading="front" side_panels="yes" lights="yes" wind_rating="N/A" kit_color_name="TBD" kit_color_value="0xd2d8e6" ms="" />
+
+<box height="56.5" s="1_2_16" configurable="1" mode="standard" model="4C16D-20" title="4C16D-20" ih="15.5" iw="122" width="31.5625" weight="2" tenants="20" parcels="2" l="sd sd sd sd sd sd sd sd sd sd sd sp" r="sd sd sd sd sd sd bms md sd sd sd sp"  />
+<box height="56.5" s="1_2_16" mode="standard" model="4C16D-19" title="4C16D-19" ih="15.5" iw="122" width="31.5625" weight="2" tenants="19" parcels="2" l="sd sd sd sd sd sd sd sd sd sd sd sp" r="sd sd sd sd sd sd bms mdsd sd sd sp"  />
+<box height="56.5" s="1_2_16" mode="standard" model="4C16D-15" title="4C16D-15" ih="15.5" iw="122" width="31.5625" weight="2" tenants="15" parcels="3" l="sd sd sd sd sd sd p5 sp" r="sd sd sd sd sd sd bms md sd sd sd sp"  />
+<box height="56.5" s="1_2_16" mode="standard" model="4C16D-09" title="4C16D-09" ih="15.5" iw="122" width="31.5625" weight="2" tenants="9" parcels="2" l="dd dd dd dd td sp" r="dd dd dd bms md td sp"  />
+<box height="56.5" s="1_1_16" configurable="1" mode="standard" model="4C16S-09" title="4C16S-09" ih="15.5" iw="67" width="17.5" weight="1" tenants="9" parcels="1" l="sd sd sd sd sd sd bms md sd sd sd sp" r="" />
+<box height="56.5" s="1_1_16" mode="standard" model="4C16S-04" title="4C16S-04" ih="15.5" iw="67" width="17.5" weight="1" tenants="4" parcels="1" l="dd dd dd bms md td sp" r="" />
+<box height="56.5" s="1_1_16" mode="standard" model="4C16S-03" title="4C16S-03" ih="15.5" iw="67" width="17.5" weight="1" tenants="3" parcels="1" l="td td bms md td sp" r="" />
+<box height="56.5" s="1_2_16" configurable="1" mode="advanced" model="4C16D-29" title="4C16D-29" ih="15.5" iw="122" width="31.5625" weight="2" tenants="29" parcels="0" l="sd sd sd sd sd sd s sd sd sd sd sd sd sd sd sd" r="sd sd sd sd sd sd ms md sd sd sd sd sd sd sd sd"  />
+<box height="56.5" s="1_1_16" configurable="1" mode="advanced" model="4C16S-14" title="4C16S-14" ih="15.5" iw="67" width="17.5" weight="1" tenants="14" parcels="0" l="sd sd sd sd sd sd ms md sd sd sd sd sd sd sd sd" r="" />
+<box height="56.5" s="4_1_16" mode="standard" model="4C16S-HOP" title="4C16S-HOP" ih="15.5" iw="67" width="17.5" weight="1" tenants="0" parcels="0" l="hopsp55 hopd hopbp" r="" />
+<box height="56.5" s="3_1_16" mode="standard" model="4C16S-BIN" title="4C16S-BIN" ih="15.5" iw="67" width="17.5" weight="1" tenants="0" parcels="0" l="tds1 tdh5p tds1 td6" r="" />
+<box height="56.5" s="2_2_16" mode="standard" model="4C16D-6P" title="4C16D-6P" ih="15.5" iw="122" width="31.5625" weight="2" tenants="0" parcels="6" l="p5 p6 sp" r="p5 p6 sp" />
+<box height="56.5" s="2_1_16" mode="standard" model="4C16S-3P" title="4C16S-3P" ih="15.5" iw="67" width="17.5" weight="1" tenants="0" parcels="3" l="p5 p6 sp" r="" />
+
+
+<box height="54.75" s="1_2_15" mode="standard" model="4C15D-18" title="4C15D-18" ih="15" iw="122" width="31.5625" weight="2" tenants="18" parcels="2" l="sd sd sd sd sd sd sd sd sd sd p5" r="sd sd sd sd sd sd bms md sd sd p5"  />
+<box height="54.75" s="1_2_15" mode="standard" model="4C15D-17" title="4C15D-17" ih="15" iw="122" width="31.5625" weight="2" tenants="17" parcels="2" l="sd sd sd sd sd sd sd sd sd p6" r="sd sd sd sd sd sd bms md sd sd p5"  />
+<box height="54.75" s="1_2_15" mode="standard" model="4C15D-16" title="4C15D-16" ih="15" iw="122" width="31.5625" weight="2" tenants="16" parcels="2" l="sd sd sd sd sd sd sd sd sd p6" r="sd sd sd sd sd sd bms md sd p6"  />
+<box height="54.75" s="1_2_15" mode="standard" model="4C15D-09" title="4C15D-09" ih="15" iw="122" width="31.5625" weight="2" tenants="9" parcels="2" l="dd dd dd dd dd p5" r="dd dd dd bms md dd p5"  />
+<box height="54.75" s="1_1_15" mode="standard" model="4C15S-08" title="4C15S-08" ih="15" iw="67" width="17.5" weight="1" tenants="8" parcels="1" l="sd sd sd sd sd sd bms md sd sd p5" r="" />
+<box height="54.75" s="1_1_15" mode="standard" model="4C15S-07" title="4C15S-07" ih="15" iw="67" width="17.5" weight="1" tenants="7" parcels="1" l="sd sd sd sd sd sd bms md sd p6" r="" />
+<box height="54.75" s="1_1_15" mode="standard" model="4C15S-04" title="4C15S-04" ih="15" iw="67" width="17.5" weight="1" tenants="4" parcels="1" l="dd dd dd bms md dd p5" r="" />
+<box height="54.75" s="1_2_15" configurable="1" mode="advanced" model="4C15D-28" title="4C15D-28" ih="15" iw="122" width="31.5625" weight="2" tenants="28" parcels="0" l="sd sd sd sd sd sd sd sd sd sd sd sd sd sd sd" r="sd sd sd sd sd sd bms md sd sd sd sd sd sd sd"  />
+<box height="54.75" s="1_2_15" mode="advanced" model="4C15D-13" title="4C15D-13" ih="15" iw="122" width="31.5625" weight="2" tenants="13" parcels="0" l="dd dd dd dd dd dd td" r="dd dd dd bms md dd dd td"  />
+<box height="54.75" s="1_1_15" configurable="1" mode="advanced" model="4C15S-13" title="4C15S-13" ih="15" iw="67" width="17.5" weight="1" tenants="13" parcels="1" l="sd sd sd sd sd sd bms md sd sd sd sd sd sd sd" r="" />
+<box height="54.75" s="1_1_15" mode="advanced" model="4C15S-06" title="4C15S-06" ih="15" iw="67" width="17.5" weight="1" tenants="6" parcels="1" l="dd dd dd bms md dd dd td" r="" />
+<box height="54.75" s="4_1_15" mode="standard" model="4C15S-HOP" title="4C15S-HOP" ih="15" iw="67" width="17.5" weight="1" tenants="0" parcels="0" l="hopsp50 hopd hopbp" r="" />
+<box height="54.75" s="3_1_15" mode="standard" model="4C15S-BIN" title="4C15S-BIN" ih="15" iw="67" width="17.5" weight="1" tenants="0" parcels="0" l="tds1 tdh5 tds1 td6" r="" />
+<box height="54.75" s="2_1_15" mode="standard" model="4C15S-3P" title="4C15S-3P" ih="15" iw="67" width="17.5" weight="1" tenants="0" parcels="3" l="p5 p5 p5" r="" />
+
+
+<box height="51.25" s="1_2_14" mode="standard" model="4C14D-16" title="4C14D-16" ih="14" iw="122" width="31.5625" weight="2" tenants="16" parcels="2" l="sd sd sd sd sd sd sd sd sd p5" r="sd sd sd sd sd sd bms md sd p5"  />
+<box height="51.25" s="1_2_14" mode="standard" model="4C14D-15" title="4C14D-15" ih="14" iw="122" width="31.5625" weight="2" tenants="15" parcels="2" l="sd sd sd sd sd sd sd sd p6" r="sd sd sd sd sd sd bms md sd p5"  />
+<box height="51.25" s="1_2_14" mode="standard" model="4C14D-14" title="4C14D-14" ih="14" iw="122" width="31.5625" weight="2" tenants="14" parcels="2" l="sd sd sd sd sd sd sd sd p6" r="sd sd sd sd sd sd bms md p6"  />
+<box height="51.25" s="1_2_14" mode="standard" model="4C14D-07" title="4C14D-07" ih="14" iw="122" width="31.5625" weight="2" tenants="7" parcels="2" l="dd dd dd dd p6" r="dd dd dd bms md p6"  />
+<box height="51.25" s="1_1_14" mode="standard" model="4C14S-07" title="4C14S-07" ih="14" iw="67" width="17.5" weight="1" tenants="7" parcels="1" l="sd sd sd sd sd sd bms md sd p5" r=""  />
+<box height="51.25" s="1_1_14" mode="standard" model="4C14S-03" title="4C14S-03" ih="14" iw="67" width="17.5" weight="1" tenants="3" parcels="1" l="dd dd dd bms md p6" r=""  />
+<box height="51.25" s="1_2_14" configurable="1" mode="advanced" model="4C14D-26" title="4C14D-26" ih="14" iw="122" width="31.5625" weight="2" tenants="26" parcels="0" l="sd sd sd sd sd sd sd sd sd sd sd sd sd sd" r="sd sd sd sd sd sd bms md sd sd sd sd sd sd"  />
+<box height="51.25" s="1_2_14" mode="advanced" model="4C14D-13" title="4C14D-13" ih="14" iw="122" width="31.5625" weight="2" tenants="13" parcels="0" l="dd dd dd dd dd dd dd" r="dd dd dd bms md dd dd dd"  />
+<box height="51.25" s="1_1_14" configurable="1" mode="advanced" model="4C14S-12" title="4C14S-12" ih="14" iw="67" width="17.5" weight="1" tenants="12" parcels="0" l="sd sd sd sd sd sd bms md sd sd sd sd sd sd" r=""  />
+<box height="51.25" s="1_1_14" mode="advanced" model="4C14S-06" title="4C14S-06" ih="14" iw="67" width="17.5" weight="1" tenants="6" parcels="0" l="dd dd dd bms md dd dd dd" r=""  />
+<box height="51.25" s="4_1_14" mode="standard" model="4C14S-HOP" title="4C14S-HOP" ih="14" iw="67" width="17.5" weight="1" tenants="0" parcels="0" l="hopsp40 hopd hopbp" r="" />
+<box height="51.25" s="3_1_14" mode="standard" model="4C14S-BIN" title="4C14S-BIN" ih="14" iw="67" width="17.5" weight="1" tenants="0" parcels="0" l="tds1 tdh5 tds1 td5" r="" />
+<box height="51.25" s="2_1_14" mode="standard" model="4C14S-3P" title="4C14S-3P" ih="14" iw="67" width="17.5" weight="1" tenants="0" parcels="3" l="p4 p5 p5" r="" />
+<box height="51.25" s="2_1_14" mode="standard" model="4C14S-2P" title="4C14S-2P" ih="14" iw="67" width="17.5" weight="1" tenants="0" parcels="2" l="p6 bms md p6" r=""  />
+
+
+<box height="47.75" s="1_2_13" mode="standard" model="4C13D-16" title="4C13D-16" ih="13" iw="122" width="31.5625" weight="2" tenants="16" parcels="2" l="sd sd sd sd sd sd sd sd sd p4" r="sd sd sd sd bms md sd sd sd p4"  />
+<box height="47.75" s="1_2_13" mode="standard" model="4C13D-15" title="4C13D-15" ih="13" iw="122" width="31.5625" weight="2" tenants="15" parcels="2" l="sd sd sd sd sd sd sd sd p5" r="sd sd sd sd bms md sd sd sd p4"  />
+<box height="47.75" s="1_2_13" mode="standard" model="4C13D-14" title="4C13D-14" ih="13" iw="122" width="31.5625" weight="2" tenants="14" parcels="2" l="sd sd sd sd sd sd sd sd p5" r="sd sd sd sd bms md sd sd p5"  />
+<box height="47.75" s="1_2_13" mode="standard" model="4C13D-13" title="4C13D-13" ih="13" iw="122" width="31.5625" weight="2" tenants="13" parcels="2" l="sd sd sd sd sd sd sd p6" r="sd sd sd sd bms md sd sd p5"  />
+<box height="47.75" s="1_2_13" mode="standard" model="4C13D-12" title="4C13D-12" ih="13" iw="122" width="31.5625" weight="2" tenants="12" parcels="2" l="sd sd sd sd sd sd sd p6" r="sd sd sd sd bms md sd p6"  />
+<box height="47.75" s="1_2_13" mode="standard" model="4C13D-07" title="4C13D-07" ih="13" iw="122" width="31.5625" weight="2" tenants="7" parcels="2" l="dd dd dd dd p5" r="dd dd bms md dd p5"  />
+<box height="47.75" s="1_1_13" mode="standard" model="4C13S-06" title="4C13S-06" ih="13" iw="67" width="17.5" weight="1" tenants="6" parcels="1" l="sd sd sd sd bms md sd sd p5" r=""  />
+<box height="47.75" s="1_1_13" mode="standard" model="4C13S-05" title="4C13S-05" ih="13" iw="67" width="17.5" weight="1" tenants="5" parcels="1" l="sd sd sd sd bms md sd p6" r=""  />
+<box height="47.75" s="1_1_13" mode="standard" model="4C13S-03" title="4C13S-03" ih="13" iw="67" width="17.5" weight="1" tenants="3" parcels="1" l="dd dd bms md dd p5" r=""  />
+<box height="47.75" s="1_2_13" configurable="1" mode="advanced" model="4C13D-24" title="4C13D-24" ih="13" iw="122" width="31.5625" weight="2" tenants="24" parcels="0" l="sd sd sd sd sd sd sd sd sd sd sd sd sd" r="sd sd sd sd bms md sd sd sd sd sd sd sd"  />
+<box height="47.75" s="1_2_13" mode="advanced" model="4C13D-11" title="4C13D-11" ih="13" iw="122" width="31.5625" weight="0" tenants="11" parcels="2" l="dd dd dd dd dd td" r="dd dd bms md dd dd td"  />
+
+<box height="44.25" s="1_1_13" configurable="1" mode="advanced" model="4C13S-11" title="4C13S-11" ih="13" iw="67" width="17.5" weight="1" tenants="11" parcels="0" l="sd sd sd sd bms md sd sd sd sd sd sd sd" r=""  />
+<box height="44.25" s="4_1_13" mode="standard" model="4C13S-HOP" title="4C13S-HOP" ih="13" iw="67" width="17.5" weight="1" tenants="0" parcels="0" l="hopsp30 hopd hopbp" r="" />
+<box height="44.25" s="3_1_13" mode="standard" model="4C13S-BIN" title="4C13S-BIN" ih="13" iw="67" width="17.5" weight="1" tenants="0" parcels="0" l="tds1 tdh11" r="" />
+<box height="44.25" s="2_1_13" mode="standard" model="4C13S-2P" title="4C13S-2P" ih="13" iw="67" width="17.5" weight="1" tenants="0" parcels="2" l="p6 bs p6" r="" />
+
+
+<box height="44.25" s="1_2_12" mode="standard" model="4C12D-12" title="4C12D-12" ih="12" iw="122" width="31.5625" weight="2" tenants="12" parcels="2" l="sd sd sd sd sd sd sd p5" r="sd sd sd sd bms md sd p5"  />
+<box height="44.25" s="1_2_12" mode="standard" model="4C12D-11" title="4C12D-11" ih="12" iw="122" width="31.5625" weight="2" tenants="11" parcels="2" l="sd sd sd sd sd sd p6" r="sd sd sd sd bms md sd p5"  />
+<box height="44.25" s="1_2_12" mode="standard" model="4C12D-10" title="4C12D-10" ih="12" iw="122" width="31.5625" weight="2" tenants="10" parcels="2" l="sd sd sd sd sd sd p6" r="sd sd sd sd bms md p6"  />
+<box height="44.25" s="1_2_12" mode="standard" model="4C12D-05" title="4C12D-05" ih="12" iw="122" width="31.5625" weight="2" tenants="5" parcels="2" l="dd dd dd p6" r="dd dd bms md p6"  />
+<box height="44.25" s="1_1_12" mode="standard" model="4C12S-02" title="4C12S-02" ih="12" iw="67" width="17.5" weight="1" tenants="2" parcels="1" l="dd dd bms md p6" r="" />
+<box height="44.25" s="1_2_12" configurable="1" mode="advanced" model="4C12D-22" title="4C12D-22" ih="12" iw="122" width="31.5625" weight="2" tenants="22" parcels="0" l="sd sd sd sd sd sd sd sd sd sd sd sd" r="sd sd sd sd bms md sd sd sd sd sd sd"  />
+<box height="44.25" s="1_1_12" configurable="1" mode="advanced" model="4C12S-10" title="4C12S-10" ih="12" iw="67" width="17.5" weight="1" tenants="10" parcels="0" l="sd sd sd sd bms md sd sd sd sd sd sd" r="" />
+<box height="44.25" s="4_1_12" mode="standard" model="4C12S-HOP" title="4C12S-HOP" ih="12" iw="67" width="17.5" weight="1" tenants="0" parcels="0" l="hopsp20 hopd hopbp" r="" />
+<box height="44.25" s="3_1_12" mode="standard" model="4C12S-BIN" title="4C12S-BIN" ih="12" iw="67" width="17.5" weight="1" tenants="0" parcels="0" l="tds1 tdh10" r="" />
+<box height="44.25" s="2_2_12" mode="standard" model="4C12D-4P" title="4C12D-4P" ih="12" iw="122" width="31.5625" weight="2" tenants="0" parcels="4" l="p6 p6" r="p6 p6" />
+<box height="44.25" s="2_1_12" mode="standard" model="4C12S-2P" title="4C12S-2P" ih="12" iw="67" width="17.5" weight="2" tenants="0" parcels="2" l="p6 p6" r="" />
+
+
+<box height="40.75" s="1_2_11" configurable="1" mode="standard" model="4C11D-20" title="4C11D-20" ih="11" iw="122" width="31.5625" weight="2" tenants="20" parcels="0" l="sd sd sd sd sd sd sd sd sd sd sd" r="sd sd sd sd bms md sd sd sd sd sd"  />
+<box height="40.75" s="1_2_11" mode="standard" model="4C11D-19" title="4C11D-19" ih="11" iw="122" width="31.5625" weight="2" tenants="19" parcels="0" l="sd sd sd sd sd sd sd sd sd sd sd" r="sd sd sd sd bms mdsd sd sd sd sd"  />
+<box height="40.75" s="1_2_11" mode="standard" model="4C11D-15" title="4C11D-15" ih="11" iw="122" width="31.5625" weight="2" tenants="15" parcels="1" l="sd sd sd sd sd sd p5" r="sd sd sd sd bms md sd sd sd sd sd"  />
+<box height="40.75" s="1_2_11" mode="standard" model="4C11D-10" title="4C11D-10" ih="11" iw="122" width="31.5625" weight="2" tenants="10" parcels="2" l="sd sd sd sd sd sd p5" r="sd sd sd sd bms md p5"  />
+<box height="40.75" s="1_2_11" mode="standard" model="4C11D-09" title="4C11D-09" ih="11" iw="122" width="31.5625" weight="2" tenants="9" parcels="2" l="sd sd sd sd sd p6" r="sd sd sd sd bms md p5"  />
+<box height="40.75" s="1_2_11" mode="standard" model="4C11D-05" title="4C11D-05" ih="11" iw="122" width="31.5625" weight="2" tenants="5" parcels="2" l="dd dd dd p5" r="dd dd bms md p5"  />
+<box height="40.75" s="1_1_11" configurable="1" mode="standard" model="4C11S-09" title="4C11S-09" ih="11" iw="67" width="17.5" weight="1" tenants="9" parcels="0" l="sd sd sd sd bms md sd sd sd sd sd" r="" />
+<box height="40.75" s="1_1_11" mode="standard" model="4C11S-04" title="4C11S-04" ih="11" iw="67" width="17.5" weight="1" tenants="4" parcels="0" l="sd sd sd sd bms md p5" r="" />
+<box height="40.75" s="1_1_11" mode="standard" model="4C11S-02" title="4C11S-02" ih="11" iw="67" width="17.5" weight="1" tenants="2" parcels="0" l="dd dd bms md p5" r="" />
+<box height="40.75" s="4_1_11" mode="standard" model="4C11S-HOP" title="4C11S-HOP" ih="11" iw="67" width="17.5" weight="1" tenants="0" parcels="0" l="bs hopd hopbp" r="" />
+<box height="40.75" s="3_1_11" mode="standard" model="4C11S-BIN" title="4C11S-BIN" ih="11" iw="67" width="17.5" weight="1" tenants="0" parcels="0" l="tds1 tdh9" r="" />
+<box height="40.75" s="2_2_11" mode="standard" model="4C11D-4P" title="4C11D-4P" ih="11" iw="122" width="31.5625" weight="2" tenants="0" parcels="4" l="p5 p6" r="p5 p6" />
+<box height="40.75" s="2_1_11" mode="standard" model="4C11S-2P" title="4C11S-2P" ih="11" iw="67" width="17.5" weight="2" tenants="0" parcels="2" l="p5 p6" r="" />
+
+
+<box height="37.25" s="1_2_10" configurable="1" mode="standard" model="4C10D-18" title="4C10D-18" ih="10" iw="122" width="31.5625" weight="2" tenants="18" parcels="0" l="sd sd sd sd sd sd sd sd sd sd" r="sd sd sd sd bms md sd sd sd sd"  />
+<box height="37.25" s="1_2_10" mode="standard" model="4C10D-09" title="4C10D-09" ih="10" iw="122" width="31.5625" weight="2" tenants="9" parcels="0" l="dd dd dd dd dd" r="dd dd bms md dd dd"  />
+<box height="37.25" s="1_2_10" mode="standard" model="4C10D-06" title="4C10D-06" ih="10" iw="122" width="31.5625" weight="2" tenants="6" parcels="1" l="dd dd p6" r="dd dd bms md dd dd"  />
+<box height="37.25" s="1_1_10" configurable="1" mode="standard" model="4C10S-08" title="4C10S-08" ih="10" iw="67" width="17.5" weight="1" tenants="8" parcels="0" l="sd sd sd sd bms md sd sd sd sd" r="" />
+<box height="37.25" s="1_1_10" mode="standard" model="4C10S-04" title="4C10S-04" ih="10" iw="67" width="17.5" weight="2" tenants="4" parcels="0" l="dd dd bms md dd dd" r="" />
+
+
+<box height="37.25" s="0_0_99" configurable="1" mode="standard" model="4CADD-10" title="4CADD-10" ih="10" iw="122" width="31.5625" weight="2" tenants="10" parcels="2" l="sd sd sd sd sd sd p4" r="sd sd ms md sd sd sp" />
+<box height="37.25" s="0_0_99" configurable="1" mode="standard" model="4CADD-09" title="4CADD-09" ih="10" iw="122" width="31.5625" weight="2" tenants="9" parcels="2" l="sd sd s sd sd sd sp" r="sd sd ms md sd sd sp" />
+<box height="37.25" s="0_0_99" mode="standard" model="4CADD-08" title="4CADD-08" ih="10" iw="122" width="31.5625" weight="2" tenants="8" parcels="2" l="sd sd sd sd sd p5" r="sd sd bms md sd p5" />
+<box height="37.25" s="0_0_99" mode="standard" model="4CADD-07" title="4CADD-07" ih="10" iw="122" width="31.5625" weight="2" tenants="7" parcels="2" l="sd sd sd sd p6" r="sd sd bms md sd p5" />
+<box height="37.25" s="0_0_99" configurable="1" mode="standard" model="4CADS-04" title="4CADS-04" ih="10" iw="67" width="17.5" weight="1" tenants="4" parcels="1" l="sd sd ms md sd sd sp" r="" />
+<box height="37.25" s="0_0_99" mode="standard" model="4CADS-03" title="4CADS-03" ih="10" iw="67" width="17.5" weight="1" tenants="4" parcels="1" l="sd sd bms md sd p5" r="" />
+<box height="37.25" s="0_0_99" mode="standard" model="4CADS-01" title="4CADS-01" ih="10" iw="67" width="17.5" weight="1" tenants="1" parcels="1" l="dd bms md p6" r="" />
+<box height="37.25" s="0_0_99" mode="standard" model="4CADS-2P" title="4CADS-2P" ih="10" iw="67" width="17.5" weight="1" tenants="1" parcels="1" l="p5 p5" r="" />
+<box height="37.25" s="0_0_99" mode="standard" model="4CADS-HOP" title="4CADS-HOP" ih="10" iw="67" width="17.5" weight="1" tenants="0" parcels="0" l="hopd hopbp" r="" />
+<box height="37.25" s="0_0_99" mode="standard" model="4CADS-BIN" title="4CADS-BIN" ih="10" iw="67" width="17.5" weight="1" tenants="0" parcels="0" l="tds1 tdh8" r="" />
+<box height="37.25" s="0_0_99" mode="standard" model="4CADD-4P" title="4CADD-4P" ih="10" iw="122" width="31.5625" weight="2" tenants="0" parcels="4" l="p5 p5" r="p5 p5" />
+
+
+<box height="33.75" s="1_2_9" configurable="1" mode="standard" model="4C09D-16" title="4C09D-16" ih="9" iw="122" width="31.5625" weight="2" tenants="16" parcels="0" l="sd sd sd sd sd sd sd sd sd" r="sd sd sd bms md sd sd sd sd"  />
+<box height="33.75" s="1_2_9" mode="standard" model="4C09D-15" title="4C09D-15" ih="9" iw="122" width="31.5625" weight="2" tenants="15" parcels="0" l="sd sd sd sd sd sd sd sd sd" r="sd sd sd bms mdsd sd sd sd"  />
+<box height="33.75" s="1_2_9" mode="standard" model="4C09D-10" title="4C09D-10" ih="9" iw="122" width="31.5625" weight="2" tenants="10" parcels="1" l="sd sd sd p6" r="sd sd sd bms md sd sd sd sd"  />
+<box height="33.75" s="1_2_9" mode="standard" model="4C09D-06" title="4C09D-06" ih="9" iw="122" width="31.5625" weight="2" tenants="6" parcels="0" l="td td td" r="td bms md sd td"  />
+<box height="33.75" s="1_2_9" mode="standard" model="4C09D-04" title="4C09D-04" ih="9" iw="122" width="31.5625" weight="2" tenants="4" parcels="1" l="td p6" r="td bms md sd td"  />
+<box height="33.75" s="1_1_9" configurable="1" mode="standard" model="4C09S-07" title="4C09S-07" ih="9" iw="67" width="17.5" weight="1" tenants="7" parcels="0" l="sd sd sd bms md sd sd sd sd" r=""  />
+<box height="33.75" s="1_1_9" mode="standard" model="4C09S-02" title="4C09S-02" ih="9" iw="67" width="17.5" weight="1" tenants="2" parcels="1" l="sd sd bms md p5" r=""  />
+<box height="33.75" s="4_1_9" mode="standard" model="4C09S-HOP" title="4C09S-HOP" ih="9" iw="67" width="17.5" weight="1" tenants="0" parcels="0" l="bs hopd lp" r="" />
+<box height="33.75" s="3_1_9" mode="standard" model="4C09S-BIN" title="4C09S-BIN" ih="9" iw="67" width="17.5" weight="1" tenants="0" parcels="0" l="tds1 tdh7" r="" />
+<box height="33.75" s="2_2_9" mode="standard" model="4C09D-4P" title="4C09D-4P" ih="9" iw="122" width="31.5625" weight="2" tenants="0" parcels="4" l="p4 p5" r="p4 p5" />
+<box height="33.75" s="2_1_9" mode="standard" model="4C09S-2P" title="4C09S-2P" ih="9" iw="67" width="17.5" weight="2" tenants="0" parcels="2" l="p4 p5" r="" />
+
+
+<box height="30.25" s="1_2_8" configurable="1" mode="standard" model="4C08D-14" title="4C08D-14" ih="8" iw="122" width="31.5625" weight="2" tenants="14" parcels="0" l="sd sd sd sd sd sd sd sd" r="sd sd bms md sd sd sd sd"  />
+<box height="30.25" s="1_2_8" mode="standard" model="4C08D-13" title="4C08D-13" ih="8" iw="122" width="31.5625" weight="2" tenants="13" parcels="0" l="sd sd sd sd sd sd sd sd" r="sd sd bms mdsd sd sd sd"  />
+<box height="30.25" s="1_2_8" mode="standard" model="4C08D-09" title="4C08D-09" ih="8" iw="122" width="31.5625" weight="2" tenants="9" parcels="1" l="sd sd sd p5" r="sd sd bms md sd sd sd sd"  />
+<box height="30.25" s="1_2_8" mode="standard" model="4C08D-07" title="4C08D-07" ih="8" iw="122" width="31.5625" weight="2" tenants="7" parcels="0" l="dd dd dd dd" r="dd bms md dd dd"  />
+<box height="30.25" s="1_2_8" mode="standard" model="4C08D-04" title="4C08D-04" ih="8" iw="122" width="31.5625" weight="2" tenants="4" parcels="1" l="dd p6" r="dd bms md dd dd"  />
+<box height="30.25" s="1_1_8" configurable="1" mode="standard" model="4C08S-06" title="4C08S-06" ih="8" iw="67" width="17.5" weight="1" tenants="6" parcels="0" l="sd sd bms md sd sd sd sd" r=""  />
+<box height="30.25" s="1_1_8" mode="standard" model="4C08S-03" title="4C08S-03" ih="8" iw="67" width="17.5" weight="1" tenants="3" parcels="0" l="dd bms md dd dd" r=""  />
+<box height="30.25" s="1_1_8" mode="standard" model="4C08S-01" title="4C08S-01" ih="8" iw="67" width="17.5" weight="1" tenants="1" parcels="1" l="sd bms md p5" r=""  />
+<box height="30.25" s="4_1_8" mode="standard" model="4C08S-HOP" title="4C08S-HOP" ih="8" iw="67" width="17.5" weight="1" tenants="0" parcels="0" l="hopd lp" r="" />
+<box height="30.25" s="3_1_8" mode="standard" model="4C08S-BIN" title="4C08S-BIN" ih="8" iw="67" width="17.5" weight="1" tenants="0" parcels="0" l="tds1 tdh6" r="" />
+<box height="30.25" s="2_1_8" mode="standard" model="4C08S-2P" title="4C08S-2P" ih="8" iw="67" width="17.5" weight="1" tenants="0" parcels="2" l="p3 p5" r="" />
+
+
+<box height="26.75" s="1_2_7" configurable="1" mode="standard" model="4C07D-12" title="4C07D-12" ih="7" iw="122" width="31.5625" weight="2" tenants="12" parcels="0" l="sd sd sd sd sd sd sd" r="sd sd bms md sd sd sd"  />
+<box height="26.75" s="1_2_7" mode="standard" model="4C07D-06" title="4C07D-06" ih="7" iw="122" width="31.5625" weight="2" tenants="6" parcels="1" l="sd p6" r="sd sd bms md sd sd sd"  />
+<box height="26.75" s="1_2_7" mode="standard" model="4C07D-05" title="4C07D-05" ih="7" iw="122" width="31.5625" weight="2" tenants="5" parcels="0" l="dd dd td" r="dd bms md td"  />
+<box height="26.75" s="1_2_7" mode="standard" model="4C07D-03" title="4C07D-03" ih="7" iw="122" width="31.5625" weight="2" tenants="3" parcels="1" l="dd p5" r="dd bms md td"  />
+<box height="26.75" s="1_1_7" configurable="1" mode="standard" model="4C07S-05" title="4C07S-05" ih="7" iw="67" width="17.5" weight="1" tenants="5" parcels="0" l="sd sd bms md sd sd sd" r=""  />
+<box height="26.75" s="2_1_7" mode="standard" model="4C07S-1P" title="4C07S-1P" ih="7" iw="67" width="17.5" weight="1" tenants="0" parcels="1" l="bs p6" r="" />
+
+<box height="23.25" s="1_2_6" configurable="1" mode="standard" model="4C06D-10" title="4C06D-10" ih="6" iw="122" width="31.5625" weight="2" tenants="10" parcels="0" l="sd sd sd sd sd sd" r="sd sd bms md sd sd"  />
+<box height="23.25" s="1_2_6" mode="standard" model="4C06D-09" title="4C06D-09" ih="6" iw="122" width="31.5625" weight="2" tenants="9" parcels="0" l="sd sd sd sd sd sd" r="sd sd bms mdsd sd"  />
+<box height="23.25" s="1_2_6" mode="standard" model="4C06D-05" title="4C06D-05" ih="6" iw="122" width="31.5625" weight="2" tenants="5" parcels="1" l="sd p5" r="sd sd bms md sd sd"  />
+<box height="23.25" s="1_2_6" mode="standard" model="4C06D-05X" title="4C06D-05X" ih="6" iw="122" width="31.5625" weight="2" tenants="5" parcels="0" l="dd dd dd" r="dd bms md dd"  />
+<box height="23.25" s="1_2_6" mode="standard" model="4C06D-04" title="4C06D-04" ih="6" iw="122" width="31.5625" weight="2" tenants="4" parcels="1" l="p6" r="sd sd bms md sd sd"  />
+<box height="23.25" s="1_2_6" mode="standard" model="4C06D-02" title="4C06D-02" ih="6" iw="122" width="31.5625" weight="2" tenants="2" parcels="1" l="p6" r="dd bms md dd"  />
+<box height="23.25" s="1_1_6" configurable="1" mode="standard" model="4C06S-04" title="4C06S-04" ih="6" iw="67" width="17.5" weight="1" tenants="4" parcels="0" l="sd sd bms md sd sd" r=""  />
+<box height="23.25" s="1_1_6" mode="standard" model="4C06S-02" title="4C06S-02" ih="6" iw="67" width="17.5" weight="1" tenants="2" parcels="0" l="dd bms md dd" r=""  />
+<box height="23.25" s="2_2_6" mode="standard" model="4C06D-2P" title="4C06D-2P" ih="6" iw="122" width="31.5625" weight="2" tenants="0" parcels="2" l="p6" r="p6" />
+<box height="23.25" s="2_1_6" mode="standard" model="4C06S-1P" title="4C06S-1P" ih="6" iw="67" width="17.5" weight="1" tenants="0" parcels="1" l="p6" r="" />
+
+<substitute_doors>
+	<tab name="tenant" description="tenant doors">
+	<item description="1 High" w_v="3.25" name="sd" />
+	<item description="2 High" w_v="6.75" name="dd" />
+	<item description="3 High" w_v="10.25" name="td" />
+	<item description="4 High" w_v="13.75" name="qd" />
+	<item description="5 High" w_v="17.25" name="qud" />
+	<item description="6 High" w_v="20.5" name="hd" />
+	</tab>
+	<tab name="slotted" description="slotted doors">
+	<item description="3 High" w_v="10.25" name="htsd3" />
+	<item description="4 High" w_v="13.75" name="htsd4" />
+	<item description="5 High" w_v="17.25" name="htsd5" />
+	<item description="6 High" w_v="20.5" name="htsd6" />
+	</tab>
+	<!--<tab name="outgoing" description="outgoing collection boxes">
+	<item description="1 High" w_v="6.75" name="md" />
+	<item description="2 High" w_v="10.25" name="mdsd" />
+	<item description="3 High" w_v="13.75" name="mddd" />
+	<item description="4 High" w_v="17.25" name="mdtd" />
+	<item description="5 High" w_v="20.75" name="mdqd" />
+	</tab>-->
+	<tab name="outgoing" description="outgoing collection boxes">
+	<item description="1 High" w_v="3.25" name="md" />
+	<item description="2 High" w_v="6.75" name="mdsd" />
+	<item description="3 High" w_v="10.25" name="mddd" />
+	<item description="4 High" w_v="13.75" name="mdtd" />
+	<item description="5 High" w_v="17.25" name="mdqd" />
+	</tab>
+	<tab name="parcel" description="parcel doors">
+	<item description="3 High" w_v="10.25" name="p3" />
+	<item description="4 High" w_v="13.75" name="p4" />
+	<item description="5 High" w_v="17.25" name="p5" />
+	<item description="6 High" w_v="20.75" name="p6" />
+	</tab>
+</substitute_doors>
+
+<installation_type>
+<!-- x_margin: total width addition per model reflecting the pedestal or kiosk -->
+<!-- x_space: space between installed kiosks -->
+	<recessed x_margin="0" x_space="0" x_margin_px="0" x_space_px="0"  />
+	<rear x_margin="0" x_space="0" x_margin_px="0" x_space_px="0"  />
+	<surface x_margin=".8125" x_space="0" x_margin_px="4" x_space_px="0" />
+	<pedestal x_margin="1.3125" x_space="2" x_margin_px="6" x_space_px="8" />
+	<depot x_margin="1.125" x_space="0" x_margin_px="6" x_space_px="0" />
+	<express x_margin=".8125" x_space="0" x_margin_px="4" x_space_px="0" />
+</installation_type>
+
+<express_kits>
+	<!-- type_1[..4] width in inches -->
+	<type_1>
+		<width>43.375</width>
+		<name>Kit I</name>
+	</type_1>
+	<type_2>
+		<width>62.5</width>
+		<name>Kit II</name>
+	</type_2>
+	<type_3>
+		<width>97.375</width>
+		<name>Kit III</name>
+	</type_3>
+	<type_4>
+		<width>110.5</width>
+		<name>Kit IV</name>
+	</type_4>
+	<post>
+		<width>10</width>
+	</post>
+</express_kits>
+</xml>
+

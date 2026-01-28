@@ -1,0 +1,109 @@
+<div class="modal-backdrop" *ngIf="isOpen" (click)="onBackdropClick($event)">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h2 class="modal-title">Share "{{ project.name }}"</h2>
+      <button class="btn-close" (click)="onCancel()" title="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body">
+      <!-- Add People Section -->
+      <div class="add-people-section">
+        <div class="input-group">
+          <input
+            type="email"
+            class="share-input"
+            placeholder="Add people by email"
+            [value]="newShareEmail"
+            (input)="newShareEmail = $any($event.target).value"
+            (keydown.enter)="onAddShare()"
+          />
+          <app-custom-dropdown [options]="dropdownOptions" [(ngModel)]="selectedRole"></app-custom-dropdown>
+          <button class="btn-add" (click)="onAddShare()" title="Add">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </button>
+        </div>
+        <p class="input-hint">Press Enter or click + to add</p>
+      </div>
+
+      <!-- Shared Users List -->
+      <div class="shared-users-section">
+        <h3 class="section-title">People with access</h3>
+
+        <!-- Owner -->
+        <div class="user-item owner-item">
+          <div class="user-avatar owner-avatar">
+            <span class="avatar-initials">{{ getUserInitials(project.owner || 'Owner') }}</span>
+          </div>
+          <div class="user-info">
+            <span class="user-name">{{ project.owner || 'Owner' }}</span>
+            <span class="user-badge owner-badge">Owner</span>
+          </div>
+        </div>
+
+        <!-- Shared Users -->
+        <div class="user-item" *ngFor="let user of sharedUsers">
+          <div class="user-avatar">
+            <span class="avatar-initials">{{ user.avatar || getUserInitials(user.email) }}</span>
+          </div>
+          <div class="user-info">
+            <span class="user-name">{{ user.email }}</span>
+            <app-custom-dropdown
+              [options]="dropdownOptions"
+              [ngModel]="user.role"
+              (ngModelChange)="onRoleChange(user, $event)"
+              [disabled]="isOwner(user.email)"
+            ></app-custom-dropdown>
+          </div>
+          <button
+            class="btn-remove"
+            *ngIf="canRemoveUser(user)"
+            (click)="onRemoveShare(user)"
+            title="Remove access"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-users" *ngIf="sharedUsers.length === 0">
+          <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          <p>No shared users yet. Add people above to share this project.</p>
+        </div>
+      </div>
+
+      <!-- Role Legend -->
+      <div class="role-legend">
+        <div class="legend-item" *ngFor="let role of roleOptions">
+          <span class="legend-dot"></span>
+          <div class="legend-text">
+            <strong>{{ role.label }}</strong> - {{ role.description }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+      <button class="btn btn-cancel" (click)="onCancel()">Cancel</button>
+      <button class="btn btn-primary" (click)="onSave()">Done</button>
+    </div>
+  </div>
+</div>

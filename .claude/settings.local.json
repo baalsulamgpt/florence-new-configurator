@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(robocopy:*)",
+      "Bash(xcopy:*)",
+      "Bash(dir:*)",
+      "Bash(powershell:*)",
+      "Bash(findstr:*)",
+      "Bash(xargs basename:*)",
+      "Bash(npx:*)",
+      "Bash(netstat:*)",
+      "Bash(ng build:*)",
+      "Bash(ping:*)"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "context7",
+    "sequential-thinking",
+    "supabase",
+    "playwright",
+    "shadcn",
+    "serena"
+  ]
+}
