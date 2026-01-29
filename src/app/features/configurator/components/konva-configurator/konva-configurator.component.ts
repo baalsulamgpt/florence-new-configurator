@@ -1164,51 +1164,81 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
   // Touch drag support for mobile
   private touchDraggedCabinet: FrameDefinition | null = null;
   private touchDragClone: HTMLElement | null = null;
+  private touchStartX = 0;
+  private touchStartY = 0;
+  private isScrolling = false;
+  private canvasTouchStartX = 0;
+  private canvasTouchStartY = 0;
 
   onTouchStart(event: TouchEvent, cabinet: FrameDefinition) {
+      const touch = event.touches[0];
+      this.touchStartX = touch.clientX;
+      this.touchStartY = touch.clientY;
+      this.isScrolling = false;
       this.touchDraggedCabinet = cabinet;
-      
-      // Create visual clone for dragging
-      const target = event.target as HTMLElement;
-      const card = target.closest('.cabinet-preview-card') as HTMLElement;
-      if (card) {
-          const clone = card.cloneNode(true) as HTMLElement;
-          clone.style.position = 'fixed';
-          clone.style.pointerEvents = 'none';
-          clone.style.opacity = '0.8';
-          clone.style.zIndex = '10000';
-          clone.style.transform = 'scale(1.1)';
-          clone.style.transition = 'none';
-          
-          const touch = event.touches[0];
-          const rect = card.getBoundingClientRect();
-          clone.style.left = `${touch.clientX - rect.width / 2}px`;
-          clone.style.top = `${touch.clientY - rect.height / 2}px`;
-          clone.style.width = `${rect.width}px`;
-          
-          document.body.appendChild(clone);
-          this.touchDragClone = clone;
-          
-          // Add visual feedback to original
-          card.style.opacity = '0.3';
-      }
-      
-      event.preventDefault();
+
+      // Don't preventDefault immediately - wait to see if user is scrolling
+      // event.preventDefault(); // REMOVED
   }
 
   onTouchMove(event: TouchEvent) {
-      if (this.touchDraggedCabinet && this.touchDragClone) {
-          event.preventDefault();
-          
-          const touch = event.touches[0];
-          const rect = this.touchDragClone.getBoundingClientRect();
-          this.touchDragClone.style.left = `${touch.clientX - rect.width / 2}px`;
-          this.touchDragClone.style.top = `${touch.clientY - rect.height / 2}px`;
+      if (!this.touchDraggedCabinet) return;
+
+      const touch = event.touches[0];
+      const deltaX = Math.abs(touch.clientX - this.touchStartX);
+      const deltaY = Math.abs(touch.clientY - this.touchStartY);
+
+      // If horizontal movement is greater than vertical, it's a scroll
+      if (deltaX > deltaY && deltaX > 10) {
+          this.isScrolling = true;
+          // Allow scrolling - don't create drag clone
+          return;
+      }
+
+      // If vertical movement or significant movement, create drag effect
+      if (!this.isScrolling && deltaY > 10) {
+          if (!this.touchDragClone && this.touchDraggedCabinet) {
+              const target = event.target as HTMLElement;
+              const card = target.closest('.cabinet-preview-card') as HTMLElement;
+              if (card) {
+                  const clone = card.cloneNode(true) as HTMLElement;
+                  clone.style.position = 'fixed';
+                  clone.style.pointerEvents = 'none';
+                  clone.style.opacity = '0.8';
+                  clone.style.zIndex = '10000';
+                  clone.style.transform = 'scale(1.1)';
+                  clone.style.transition = 'none';
+
+                  const rect = card.getBoundingClientRect();
+                  clone.style.left = `${touch.clientX - rect.width / 2}px`;
+                  clone.style.top = `${touch.clientY - rect.height / 2}px`;
+                  clone.style.width = `${rect.width}px`;
+
+                  document.body.appendChild(clone);
+                  this.touchDragClone = clone;
+
+                  // Add visual feedback to original
+                  card.style.opacity = '0.3';
+              }
+          }
+
+          if (this.touchDragClone) {
+              event.preventDefault();
+              const rect = this.touchDragClone.getBoundingClientRect();
+              this.touchDragClone.style.left = `${touch.clientX - rect.width / 2}px`;
+              this.touchDragClone.style.top = `${touch.clientY - rect.height / 2}px`;
+          }
       }
   }
 
   onTouchEnd(event: TouchEvent) {
       if (!this.touchDraggedCabinet) return;
+
+      // If was scrolling, just reset and don't drop
+      if (this.isScrolling) {
+          this.resetTouchState();
+          return;
+      }
 
       const touch = event.changedTouches[0];
       const container = this.containerRef.nativeElement;
@@ -1217,24 +1247,24 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
       // Check if touch ended within canvas
       if (touch.clientX >= rect.left && touch.clientX <= rect.right &&
           touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
-          
+
           // Simulate drop on canvas
           const cabinet = this.touchDraggedCabinet;
-          
+
           // Calculate position relative to stage
           const x = touch.clientX - rect.left;
           const y = touch.clientY - rect.top;
-          
+
           // Convert screen position to stage position
           const transform = this.stage.getAbsoluteTransform().copy();
           transform.invert();
           const pos = transform.point({ x, y });
-          
+
           // Find insertion index based on position
-          const otherGroups = this.layer.getChildren(node => 
+          const otherGroups = this.layer.getChildren(node =>
               node instanceof Konva.Group && node.attrs.frameIndex !== undefined
           ).sort((a, b) => a.x() - b.x());
-          
+
           let insertIndex = otherGroups.length;
           for (let i = 0; i < otherGroups.length; i++) {
               const other = otherGroups[i];
@@ -1243,21 +1273,30 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
                   break;
               }
           }
-          
+
           this.addCabinetToWall(cabinet, insertIndex);
       }
 
       // Cleanup
+      this.resetTouchState();
+  }
+
+  private resetTouchState() {
       if (this.touchDragClone) {
           this.touchDragClone.remove();
           this.touchDragClone = null;
       }
-      
+
       // Restore original card opacity
       const cards = document.querySelectorAll('.cabinet-preview-card');
-      cards.forEach(card => (card as HTMLElement).style.opacity = '1');
-      
+      cards.forEach(card => {
+          (card as HTMLElement).style.opacity = '1';
+      });
+
       this.touchDraggedCabinet = null;
+      this.isScrolling = false;
+      this.touchStartX = 0;
+      this.touchStartY = 0;
   }
 
   private initKonva() {
@@ -1285,6 +1324,27 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
       pixelRatio: 8, // 2x improvement (was 4)
       draggable: true // Allow panning stage
     });
+
+    // Prevent default touch behaviors on canvas (scroll, zoom) on mobile
+    container.addEventListener('touchstart', (e: TouchEvent) => {
+      const touch = e.touches[0];
+      this.canvasTouchStartX = touch.clientX;
+      this.canvasTouchStartY = touch.clientY;
+    }, { passive: true });
+
+    container.addEventListener('touchmove', (e: TouchEvent) => {
+      // Prevent default only if touching canvas and moving vertically (pan/zoom)
+      if (e.target === container) {
+        const touch = e.touches[0];
+        const deltaX = Math.abs(touch.clientX - this.canvasTouchStartX);
+        const deltaY = Math.abs(touch.clientY - this.canvasTouchStartY);
+
+        // Only prevent if vertical movement (canvas pan/zoom) not horizontal (page scroll)
+        if (deltaY > deltaX && deltaY > 10) {
+          e.preventDefault();
+        }
+      }
+    }, { passive: false });
 
     // Set initial scale (graduated for different screen sizes)
     let scale: number;
