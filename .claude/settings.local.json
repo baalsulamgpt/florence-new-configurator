@@ -10,7 +10,18 @@
       "Bash(npx:*)",
       "Bash(netstat:*)",
       "Bash(ng build:*)",
-      "Bash(ping:*)"
+      "Bash(ping:*)",
+      "Bash(git remote set-url:*)",
+      "Bash(git push:*)",
+      "Bash(firebase login:*)",
+      "Bash(firebase logout:*)",
+      "Bash(cat:*)",
+      "Bash(taskkill:*)",
+      "Bash(git ls-tree:*)",
+      "Bash(grep:*)",
+      "Bash(git add:*)",
+      "Bash(firebase projects:list:*)",
+      "Bash(firebase deploy:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

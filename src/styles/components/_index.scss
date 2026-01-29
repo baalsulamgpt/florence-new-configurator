@@ -1,0 +1,13 @@
+// ============================================
+// Shared Components Styles
+// ============================================
+// Import this file in component SCSS files to use shared styles
+// Usage: @import '../../styles/components';
+// ============================================
+
+@import 'animations';
+@import 'buttons';
+@import 'dropdowns';
+@import 'forms';
+@import 'modals';
+@import 'user-menu';

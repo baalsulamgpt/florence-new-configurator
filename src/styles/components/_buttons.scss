@@ -1,0 +1,147 @@
+// ============================================
+// Shared Button Styles
+// ============================================
+
+.btn {
+  padding: var(--spacing-2) var(--spacing-4);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-1_5);
+
+  .icon,
+  svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  &.btn-primary {
+    background: var(--color-brand-primary);
+    color: var(--color-white);
+
+    &:hover:not(:disabled) {
+      background: var(--color-brand-primary-hover);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-brand);
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &.btn-secondary {
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+
+    &:hover {
+      background: var(--color-bg-secondary);
+      color: var(--color-text-primary);
+    }
+  }
+
+  &.btn-large {
+    padding: var(--spacing-3_5) var(--spacing-7);
+    font-size: var(--font-size-base);
+  }
+
+  &.btn-icon-only {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover {
+      background: var(--color-bg-tertiary);
+      color: var(--color-brand-primary);
+    }
+
+    &.btn-icon-danger {
+      &:hover {
+        background: var(--color-error-bg);
+        color: var(--color-error);
+      }
+    }
+  }
+}
+
+// ============================================
+// Icon Button (used in cards, tables)
+// ============================================
+
+.icon-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: var(--radius-base);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-base);
+  position: relative;
+  color: var(--color-text-secondary);
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  &:hover {
+    background: var(--color-bg-tertiary);
+    color: var(--color-brand-primary);
+  }
+
+  &.icon-btn-danger {
+    &:hover {
+      background: var(--color-error-bg);
+      color: var(--color-error);
+    }
+  }
+
+  // Custom tooltip
+  &[data-tooltip] {
+    &::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      padding: var(--spacing-1) var(--spacing-2);
+      background: var(--color-gray-900);
+      color: var(--color-white);
+      font-size: 11px;
+      font-weight: var(--font-weight-medium);
+      border-radius: var(--radius-base);
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: all var(--transition-base);
+      pointer-events: none;
+      z-index: var(--z-tooltip);
+    }
+
+    &:hover::after {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+}

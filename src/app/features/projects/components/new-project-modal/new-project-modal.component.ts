@@ -25,7 +25,7 @@ export class NewProjectModalComponent {
 
   projectName = '';
   projectEmail = '';
-  selectedProductType: ProductType | null = null;
+  selectedProductType: ProductType | null = '4C';
 
   productTypes: ProductTypeInfo[] = [
     {
@@ -55,6 +55,10 @@ export class NewProjectModalComponent {
   ];
 
   constructor(private projectService: ProjectService) {}
+
+  isProductTypeDisabled(type: ProductType): boolean {
+    return type !== '4C';
+  }
 
   selectProductType(type: ProductType) {
     this.selectedProductType = type;

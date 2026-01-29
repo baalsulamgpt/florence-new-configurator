@@ -1,0 +1,150 @@
+// ============================================
+// Shared Dropdown Styles
+// ============================================
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + var(--spacing-2));
+  left: 0;
+  min-width: 150px;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-border-primary);
+  overflow: hidden;
+  animation: dropdownFadeIn var(--transition-fast) ease;
+  z-index: var(--z-dropdown);
+
+  &.dropdown-right {
+    left: auto;
+    right: 0;
+  }
+
+  // Custom scrollbar
+  &.dropdown-scrollable {
+    max-height: 300px;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: var(--color-bg-secondary);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--color-gray-300);
+      border-radius: 3px;
+
+      &:hover {
+        background: var(--color-gray-400);
+      }
+    }
+  }
+}
+
+.dropdown-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2_5);
+  padding: var(--spacing-2_5) var(--spacing-3_5);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: background var(--transition-base);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  text-align: left;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    color: var(--color-text-secondary);
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    background: var(--color-bg-secondary);
+  }
+
+  &:last-child {
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  }
+
+  &.dropdown-item-divider {
+    border-top: 1px solid var(--color-border-primary);
+    margin-top: var(--spacing-1);
+    padding-top: var(--spacing-2_5);
+  }
+
+  &.dropdown-item-danger {
+    color: var(--color-error);
+
+    svg {
+      color: var(--color-error);
+    }
+
+    &:hover {
+      background: var(--color-error-bg);
+    }
+  }
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: var(--color-border-primary);
+  margin: var(--spacing-1) 0;
+}
+
+// ============================================
+// Dropdown Trigger Button
+// ============================================
+
+.dropdown-trigger-btn {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-base);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-base);
+  color: var(--color-text-secondary);
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.06);
+  }
+
+  &.active {
+    background: var(--color-brand-accent-bg);
+
+    svg {
+      color: var(--color-brand-primary);
+    }
+  }
+}
+
+// ============================================
+// Dropdown Arrow
+// ============================================
+
+.dropdown-arrow {
+  width: 14px;
+  height: 14px;
+  color: var(--color-text-secondary);
+  transition: transform var(--transition-base);
+
+  &.rotated {
+    transform: rotate(180deg);
+  }
+}

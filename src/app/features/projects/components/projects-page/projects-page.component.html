@@ -145,15 +145,15 @@
             class="table-row"
             (click)="openProject(project)"
           >
-            <td class="name-cell">
+            <td class="name-cell" data-label="Project Name">
               <span class="project-name-link">{{ project.name }}</span>
             </td>
-            <td class="type-cell">
+            <td class="type-cell" data-label="Product Type">
               <span class="type-badge">{{ getProductTypeLabel(project.productType) }}</span>
             </td>
-            <td class="date-cell">{{ formatDate(project.createdAt) }}</td>
-            <td class="date-cell">{{ formatDate(project.updatedAt) }}</td>
-            <td class="icon-cell">
+            <td class="date-cell" data-label="Created">{{ formatDate(project.createdAt) }}</td>
+            <td class="date-cell" data-label="Last Updated">{{ formatDate(project.updatedAt) }}</td>
+            <td class="icon-cell" data-label="PDF">
               <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                 <polyline points="14 2 14 8 20 8"/>
@@ -161,7 +161,7 @@
                 <path d="M9 15h6"/>
               </svg>
             </td>
-            <td class="icon-cell">
+            <td class="icon-cell" data-label="REVIT/CAD">
               <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M12 3l8 4.5v9l-8 4-8-4v-9z"/>
                 <path d="M12 12l8-4.5"/>
@@ -169,12 +169,12 @@
                 <path d="M12 12L4 7.5"/>
               </svg>
             </td>
-            <td class="owner-cell">
+            <td class="owner-cell" data-label="Owner">
               <span class="owner-email" [title]="project.owner || 'Unknown'">
                 {{ project.owner || 'Unknown' }}
               </span>
             </td>
-            <td class="actions-cell" (click)="$event.stopPropagation()">
+            <td class="actions-cell" data-label="Actions" (click)="$event.stopPropagation()">
               <button class="table-btn" data-tooltip="Share" (click)="openShareModal(project)">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="18" cy="5" r="3"/>

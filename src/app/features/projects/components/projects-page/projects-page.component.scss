@@ -1,4 +1,8 @@
-@import '../../../../../styles/variables';
+@import '../../../../../styles/components';
+
+// ============================================
+// Projects Page
+// ============================================
 
 .projects-container {
   width: 100%;
@@ -9,7 +13,7 @@
 }
 
 // ====================================================================
-// Main Header (60px - same as Konva page)
+// Main Header (60px)
 // ====================================================================
 
 .main-header {
@@ -64,6 +68,7 @@
       }
     }
 
+    // Buttons in header
     .btn {
       padding: var(--spacing-2) var(--spacing-4);
       border: none;
@@ -140,133 +145,6 @@
         }
       }
     }
-  }
-}
-
-// ====================================================================
-// User Avatar Menu
-// ====================================================================
-
-.user-menu-container {
-  position: relative;
-}
-
-.user-avatar-btn {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-2);
-  padding: 4px 10px 4px 6px;
-  border: 1px solid var(--color-border-secondary);
-  border-radius: 20px;
-  background: var(--color-white);
-  cursor: pointer;
-  transition: all var(--transition-base);
-
-  &:hover {
-    border-color: var(--color-brand-primary);
-    box-shadow: var(--shadow-brand);
-  }
-}
-
-.user-initials {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--color-brand-primary);
-  color: var(--color-white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  font-weight: var(--font-weight-semibold);
-}
-
-.dropdown-arrow {
-  width: 14px;
-  height: 14px;
-  color: var(--color-text-secondary);
-  transition: transform var(--transition-base);
-
-  &.rotated {
-    transform: rotate(180deg);
-  }
-}
-
-.user-dropdown {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  min-width: 200px;
-  background: var(--color-white);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--color-border-primary);
-  overflow: hidden;
-  animation: dropdownSlideIn var(--transition-base) ease;
-  z-index: var(--z-dropdown);
-
-  .user-info {
-    padding: var(--spacing-3_5);
-    border-bottom: 1px solid var(--color-border-primary);
-
-    .user-email {
-      display: block;
-      font-size: var(--font-size-sm);
-      font-weight: var(--font-weight-medium);
-      color: var(--color-text-primary);
-      margin-bottom: 2px;
-    }
-
-    .user-role {
-      display: block;
-      font-size: 11px;
-      color: var(--color-text-secondary);
-    }
-  }
-
-  .dropdown-divider {
-    height: 1px;
-    background: var(--color-border-primary);
-  }
-}
-
-.dropdown-item {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: var(--spacing-2_5) var(--spacing-3_5);
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  transition: background var(--transition-base);
-  font-size: var(--font-size-sm);
-  color: var(--color-text-primary);
-  text-align: left;
-
-  svg {
-    width: 16px;
-    height: 16px;
-    color: var(--color-text-secondary);
-  }
-
-  &:hover {
-    background: var(--color-bg-secondary);
-  }
-
-  &:last-child {
-    border-radius: 0 0 var(--radius-xl) var(--radius-xl);
-  }
-}
-
-@keyframes dropdownSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }
 
@@ -367,72 +245,6 @@
   gap: 6px;
   opacity: 0;
   transition: opacity var(--transition-base);
-}
-
-.btn-icon {
-  width: 28px;
-  height: 28px;
-  border: none;
-  border-radius: var(--radius-base);
-  background: rgba(255, 255, 255, 0.9);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all var(--transition-base);
-  position: relative;
-
-  svg {
-    width: 14px;
-    height: 14px;
-    color: var(--color-text-secondary);
-  }
-
-  &:hover {
-    background: var(--color-white);
-    transform: scale(1.1);
-
-    svg {
-      color: var(--color-brand-primary);
-    }
-  }
-
-  &.btn-icon-danger {
-    &:hover {
-      background: var(--color-error-bg);
-
-      svg {
-        color: var(--color-error);
-      }
-    }
-  }
-
-  // Custom tooltip
-  &::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: calc(100% + 6px);
-    left: 50%;
-    transform: translateX(-50%) translateY(4px);
-    padding: 4px 8px;
-    background: var(--color-gray-900);
-    color: var(--color-white);
-    font-size: 11px;
-    font-weight: var(--font-weight-medium);
-    border-radius: var(--radius-base);
-    white-space: nowrap;
-    opacity: 0;
-    visibility: hidden;
-    transition: all var(--transition-base);
-    pointer-events: none;
-    z-index: var(--z-tooltip);
-  }
-
-  &:hover::after {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(-50%) translateY(0);
-  }
 }
 
 // ====================================================================
@@ -588,30 +400,32 @@
               }
 
               // Custom tooltip
-              &::after {
-                content: attr(data-tooltip);
-                position: absolute;
-                bottom: calc(100% + 8px);
-                left: 50%;
-                transform: translateX(-50%) translateY(4px);
-                padding: var(--spacing-1) var(--spacing-2);
-                background: var(--color-gray-900);
-                color: var(--color-white);
-                font-size: 11px;
-                font-weight: var(--font-weight-medium);
-                border-radius: var(--radius-base);
-                white-space: nowrap;
-                opacity: 0;
-                visibility: hidden;
-                transition: all var(--transition-base);
-                pointer-events: none;
-                z-index: var(--z-tooltip);
-              }
+              &[data-tooltip] {
+                &::after {
+                  content: attr(data-tooltip);
+                  position: absolute;
+                  bottom: calc(100% + 8px);
+                  left: 50%;
+                  transform: translateX(-50%) translateY(4px);
+                  padding: var(--spacing-1) var(--spacing-2);
+                  background: var(--color-gray-900);
+                  color: var(--color-white);
+                  font-size: 11px;
+                  font-weight: var(--font-weight-medium);
+                  border-radius: var(--radius-base);
+                  white-space: nowrap;
+                  opacity: 0;
+                  visibility: hidden;
+                  transition: all var(--transition-base);
+                  pointer-events: none;
+                  z-index: var(--z-tooltip);
+                }
 
-              &:hover::after {
-                opacity: 1;
-                visibility: visible;
-                transform: translateX(-50%) translateY(0);
+                &:hover::after {
+                  opacity: 1;
+                  visibility: visible;
+                  transform: translateX(-50%) translateY(0);
+                }
               }
             }
           }
@@ -653,4 +467,363 @@
   color: var(--color-text-secondary);
   margin: 0 0 var(--spacing-8) 0;
   max-width: 400px;
+}
+
+// ====================================================================
+// Responsive Design
+// ====================================================================
+
+// Extra Small Devices (iPhone SE: 320px - 374px)
+@media (max-width: 374px) {
+  .projects-container {
+    background: transparent;
+  }
+
+  .projects-main {
+    padding: var(--spacing-3);
+    background: transparent;
+  }
+
+  .main-header {
+    height: auto;
+    min-height: 60px;
+
+    .header-content {
+      flex-wrap: wrap;
+      padding: var(--spacing-2) var(--spacing-3);
+      gap: var(--spacing-2);
+
+      .florence-logo {
+        height: 28px;
+      }
+
+      .page-title {
+        font-size: var(--font-size-base);
+        order: 1;
+      }
+
+      .spacer {
+        display: none;
+      }
+
+      .search-input {
+        width: 100%;
+        order: 3;
+        font-size: var(--font-size-xs);
+        padding: var(--spacing-1_5) var(--spacing-2);
+      }
+
+      .btn {
+        order: 2;
+        padding: var(--spacing-1_5) var(--spacing-3);
+        font-size: var(--font-size-xs);
+        white-space: nowrap;
+
+        .icon {
+          font-size: var(--font-size-sm);
+        }
+      }
+
+      .view-toggle {
+        order: 4;
+        margin-left: auto;
+      }
+    }
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-3);
+  }
+
+  .project-card {
+    .card-actions {
+      opacity: 1;
+      top: 8px;
+      right: 8px;
+    }
+  }
+
+  .card-preview {
+    height: 100px;
+  }
+
+  .preview-icon {
+    font-size: 32px;
+  }
+
+  .product-type-badge {
+    font-size: 10px;
+  }
+
+  .empty-state {
+    padding: var(--spacing-8) var(--spacing-4);
+  }
+
+  .empty-icon {
+    font-size: 56px;
+  }
+
+  .empty-state h2 {
+    font-size: var(--font-size-xl);
+  }
+
+  .empty-state p {
+    font-size: var(--font-size-sm);
+  }
+
+  // Table view - hide on very small screens
+  .projects-table {
+    background: transparent;
+    box-shadow: none;
+
+    .table {
+      thead {
+        display: none;
+      }
+
+      tbody {
+        .table-row {
+          display: block;
+          border-bottom: 1px solid var(--color-border-primary);
+          padding: var(--spacing-3);
+          margin-bottom: var(--spacing-2);
+          background: var(--color-white);
+          border-radius: var(--radius-md);
+
+          td {
+            display: block;
+            text-align: left;
+            padding: var(--spacing-1_5) 0;
+            border: none;
+
+            &::before {
+              content: attr(data-label);
+              font-weight: var(--font-weight-semibold);
+              color: var(--color-text-secondary);
+              font-size: var(--font-size-xs);
+              display: block;
+              margin-bottom: 2px;
+            }
+
+            &.name-cell {
+              .project-name-link {
+                font-size: var(--font-size-base);
+              }
+            }
+
+            &.actions-cell {
+              display: flex;
+              justify-content: flex-start;
+              padding-top: var(--spacing-3);
+              border: none !important;
+
+              &::before {
+                display: none;
+              }
+            }
+
+            &.icon-cell {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Small Devices (375px - 767px) - Standard Mobile
+@media (min-width: 375px) and (max-width: 767px) {
+  .projects-container {
+    background: transparent;
+  }
+
+  .projects-main {
+    padding: var(--spacing-4);
+    background: transparent;
+  }
+
+  .main-header {
+    height: auto;
+    min-height: 60px;
+
+    .header-content {
+      flex-wrap: wrap;
+      padding: var(--spacing-2) var(--spacing-4);
+      gap: var(--spacing-2);
+
+      .florence-logo {
+        height: 32px;
+      }
+
+      .page-title {
+        font-size: var(--font-size-lg);
+        order: 1;
+      }
+
+      .spacer {
+        display: none;
+      }
+
+      .search-input {
+        width: 100%;
+        order: 3;
+      }
+
+      .btn {
+        order: 2;
+        white-space: nowrap;
+      }
+
+      .view-toggle {
+        order: 4;
+        margin-left: auto;
+      }
+    }
+  }
+
+  .projects-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: var(--spacing-4);
+  }
+
+  .card-preview {
+    height: 120px;
+  }
+
+  .empty-state {
+    padding: var(--spacing-10) var(--spacing-5);
+  }
+
+  // Table view - convert to cards on mobile
+  .projects-table {
+    background: transparent;
+    box-shadow: none;
+
+    .table {
+      thead {
+        display: none;
+      }
+
+      tbody {
+        .table-row {
+          display: block;
+          border: 1px solid var(--color-border-primary);
+          border-radius: var(--radius-lg);
+          margin-bottom: var(--spacing-3);
+          background: var(--color-white);
+          box-shadow: var(--shadow-sm);
+
+          td {
+            display: block;
+            text-align: left;
+            padding: var(--spacing-2) var(--spacing-3);
+            border: none;
+
+            &::before {
+              content: attr(data-label);
+              font-weight: var(--font-weight-semibold);
+              color: var(--color-text-secondary);
+              font-size: var(--font-size-xs);
+              display: block;
+              margin-bottom: 4px;
+            }
+
+            &.name-cell {
+              background: var(--color-bg-tertiary);
+              padding: var(--spacing-3);
+
+              .project-name-link {
+                font-size: var(--font-size-base);
+              }
+            }
+
+            &.actions-cell {
+              display: flex;
+              justify-content: flex-start;
+              padding-top: var(--spacing-3);
+              border: none !important;
+
+              &::before {
+                display: none;
+              }
+            }
+
+            &.icon-cell {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Medium Devices (768px - 1023px) - Tablets
+@media (min-width: 768px) and (max-width: 1023px) {
+  .main-header {
+    .header-content {
+      padding: 0 var(--spacing-4);
+
+      .search-input {
+        width: 180px;
+      }
+
+      .page-title {
+        font-size: var(--font-size-base);
+      }
+    }
+  }
+
+  .projects-main {
+    padding: var(--spacing-5);
+  }
+
+  .projects-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+
+  // Table view - responsive adjustments
+  .projects-table {
+    .table {
+      thead th {
+        padding: var(--spacing-2_5) var(--spacing-3);
+        font-size: 10px;
+      }
+
+      tbody td {
+        padding: var(--spacing-2_5) var(--spacing-3);
+        font-size: var(--font-size-xs);
+      }
+    }
+  }
+}
+
+// Touch device optimizations
+@media (hover: none) and (pointer: coarse) {
+  .project-card {
+    &:hover {
+      transform: none;
+    }
+
+    .card-actions {
+      opacity: 1;
+    }
+  }
+
+  .icon-btn,
+  .table-btn {
+    &:hover {
+      transform: none;
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  .user-avatar-btn:hover {
+    box-shadow: none;
+  }
 }

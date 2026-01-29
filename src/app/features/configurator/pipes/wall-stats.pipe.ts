@@ -7,8 +7,10 @@ interface WallStats {
     parcelCabinets: number;
     tenantRange: string;
     parcelRange: string;
-    maxWidth: number;
-    maxHeight: number;
+    maxWidth: string;
+    maxHeight: string;
+    roMin: string;
+    roMax: string;
 }
 
 @Pipe({
@@ -27,8 +29,10 @@ export class WallStatsPipe implements PipeTransform {
                 parcelCabinets: 0,
                 tenantRange: '',
                 parcelRange: '',
-                maxWidth: 0,
-                maxHeight: 0
+                maxWidth: '',
+                maxHeight: '',
+                roMin: '',
+                roMax: ''
             };
         }
 
@@ -58,9 +62,14 @@ export class WallStatsPipe implements PipeTransform {
             parcelCabinets: 0,
             tenantRange: '',
             parcelRange: '',
-            maxWidth: 0,
-            maxHeight: 0
+            maxWidth: '',
+            maxHeight: '',
+            roMin: '',
+            roMax: ''
         };
+
+        let maxWidthNum = 0;
+        let maxHeightNum = 0;
 
         if (!wall.frames || wall.frames.length === 0) {
             return stats;
@@ -75,15 +84,12 @@ export class WallStatsPipe implements PipeTransform {
             stats.totalCabinets++;
 
             // Accumulate dimensions
-            stats.maxWidth += frame.width;
-            if (frame.height > stats.maxHeight) {
-                stats.maxHeight = frame.height;
+            maxWidthNum += frame.width;
+            if (frame.height > maxHeightNum) {
+                maxHeightNum = frame.height;
             }
 
-            // Count doors by type (each door can be tenant or parcel)
-            let hasTenant = false;
-            let hasParcel = false;
-
+            // Count individual doors (not cabinets)
             frame.doors?.forEach((door: Door) => {
                 const doorType = (door.door_type || '').toLowerCase();
 
@@ -98,7 +104,7 @@ export class WallStatsPipe implements PipeTransform {
                                      doorType.startsWith('hop') || doorType.startsWith('td');
 
                 if (isParcelDoor) {
-                    hasParcel = true;
+                    stats.parcelCabinets++;
                     // Parcel labels have format "1P", "2P", etc. - strip 'P' suffix
                     const labelWithoutSuffix = (door.label || '').replace(/P$/i, '');
                     const number = parseInt(labelWithoutSuffix, 10);
@@ -107,26 +113,13 @@ export class WallStatsPipe implements PipeTransform {
                     }
                 } else {
                     // Tenant door types: sd, dd, td, qd, etc.
-                    hasTenant = true;
+                    stats.tenantCabinets++;
                     const number = parseInt(door.label || '', 10);
                     if (!isNaN(number)) {
                         tenantNumbers.push(number);
                     }
                 }
             });
-
-            // Count cabinet based on what doors it contains
-            if (hasParcel && !hasTenant) {
-                stats.parcelCabinets++;
-            } else if (hasTenant && !hasParcel) {
-                stats.tenantCabinets++;
-            } else {
-                // Mixed cabinet - count in both (or could count as tenant)
-                stats.tenantCabinets++;
-                if (hasParcel) {
-                    stats.parcelCabinets++;
-                }
-            }
         });
 
         console.log('[WallStatsPipe] Result:', stats, 'tenantNumbers:', tenantNumbers, 'parcelNumbers:', parcelNumbers);
@@ -144,7 +137,75 @@ export class WallStatsPipe implements PipeTransform {
             stats.parcelRange = minP === maxP ? `${minP}P` : `${minP}P-${maxP}P`;
         }
 
+        // Format dimensions with fractions
+        stats.maxWidth = this.formatInches(maxWidthNum);
+        stats.maxHeight = this.formatInches(maxHeightNum);
+
+        // Calculate RO MIN and RO MAX
+        // Count single vs double column cabinets
+        let singleColumnCount = 0;
+        let doubleColumnCount = 0;
+
+        wall.frames?.forEach((frame: Frame) => {
+            const hasRightColumn = frame.doors?.some(d => d.column === 'right');
+            if (hasRightColumn) {
+                doubleColumnCount++;
+            } else {
+                singleColumnCount++;
+            }
+        });
+
+        const overallWidth = maxWidthNum;
+        let roMaxDeduction = 0;
+        let roMinDeduction = 0;
+
+        if (doubleColumnCount > 0 && singleColumnCount === 0) {
+            // Double column units only
+            roMaxDeduction = 15 / 16; // 0.9375"
+            roMinDeduction = 1 + 3 / 16; // 1.1875"
+        } else if (singleColumnCount > 0 && doubleColumnCount === 0) {
+            // Single column units only
+            roMaxDeduction = 1;
+            roMinDeduction = 1 + 1 / 4; // 1.25"
+        } else {
+            // Mixed single and double column units
+            roMaxDeduction = 31 / 32; // 0.96875"
+            roMinDeduction = 1 + 7 / 32; // 1.21875"
+        }
+
+        stats.roMax = this.formatInches(overallWidth - roMaxDeduction);
+        stats.roMin = this.formatInches(overallWidth - roMinDeduction);
+
         return stats;
+    }
+
+    private formatInches(value: number): string {
+        const whole = Math.floor(value);
+        const fraction = value - whole;
+        const fractionDenominators = [32, 16, 8, 4, 2];
+
+        // Find the best fraction representation
+        for (const denom of fractionDenominators) {
+            const numer = Math.round(fraction * denom);
+            if (Math.abs(numer / denom - fraction) < 0.01) {
+                if (numer === 0) {
+                    return `${whole}"`;
+                } else if (numer === 1 && denom === 2) {
+                    return `${whole} 1/2"`;
+                } else if (denom === 4) {
+                    return `${whole} ${numer}/4"`;
+                } else if (denom === 8) {
+                    return `${whole} ${numer}/8"`;
+                } else if (denom === 16) {
+                    return `${whole} ${numer}/16"`;
+                } else if (denom === 32) {
+                    return `${whole} ${numer}/32"`;
+                }
+            }
+        }
+
+        // Fallback to decimal
+        return `${value.toFixed(2)}"`;
     }
 
     clearCache(): void {

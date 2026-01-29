@@ -1,103 +1,13 @@
-@import '../../../../../styles/variables';
+@import '../../../../../styles/components';
 
-.modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--color-bg-overlay);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: var(--z-modal);
-  animation: fadeIn var(--transition-base);
-}
+// ============================================
+// Share Modal
+// Overrides specific to this modal
+// ============================================
 
-.modal-container {
-  background: var(--color-white);
-  border-radius: var(--radius-2xl);
-  box-shadow: var(--shadow-2xl);
-  width: 90%;
-  max-width: 540px;
-  max-height: 85vh;
-  display: flex;
-  flex-direction: column;
-  animation: slideUp var(--transition-normal);
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-// ====================================================================
-// Modal Header
-// ====================================================================
-
-.modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--spacing-6);
-  border-bottom: 1px solid var(--color-border-primary);
-
-  .modal-title {
-    font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-text-primary);
-    margin: 0;
-  }
-
-  .btn-close {
-    width: 32px;
-    height: 32px;
-    border: none;
-    background: transparent;
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-text-secondary);
-    transition: all var(--transition-base);
-
-    svg {
-      width: 20px;
-      height: 20px;
-    }
-
-    &:hover {
-      background: var(--color-bg-tertiary);
-      color: var(--color-text-primary);
-    }
-  }
-}
-
-// ====================================================================
-// Modal Body
-// ====================================================================
-
-.modal-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: var(--spacing-6);
-}
-
-// ====================================================================
+// ============================================
 // Add People Section
-// ====================================================================
+// ============================================
 
 .add-people-section {
   margin-bottom: var(--spacing-6);
@@ -163,9 +73,9 @@
   }
 }
 
-// ====================================================================
+// ============================================
 // Shared Users Section
-// ====================================================================
+// ============================================
 
 .shared-users-section {
   margin-bottom: var(--spacing-6);
@@ -249,28 +159,8 @@
     }
   }
 
-  .btn-remove {
-    width: 32px;
-    height: 32px;
-    border: none;
-    background: transparent;
-    border-radius: var(--radius-base);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-text-secondary);
-    transition: all var(--transition-base);
-
-    svg {
-      width: 16px;
-      height: 16px;
-    }
-
-    &:hover {
-      background: var(--color-error-bg);
-      color: var(--color-error);
-    }
+  .btn-remove-user {
+    @extend .icon-btn;
   }
 
   .empty-users {
@@ -292,9 +182,9 @@
   }
 }
 
-// ====================================================================
+// ============================================
 // Role Legend
-// ====================================================================
+// ============================================
 
 .role-legend {
   padding: var(--spacing-4);
@@ -326,53 +216,6 @@
 
       strong {
         color: var(--color-text-primary);
-      }
-    }
-  }
-}
-
-// ====================================================================
-// Modal Footer
-// ====================================================================
-
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--spacing-3);
-  padding: var(--spacing-4) var(--spacing-6);
-  border-top: 1px solid var(--color-border-primary);
-
-  .btn {
-    padding: var(--spacing-2_5) var(--spacing-5);
-    border: none;
-    border-radius: var(--radius-md);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    cursor: pointer;
-    transition: all var(--transition-base);
-
-    &.btn-cancel {
-      background: transparent;
-      color: var(--color-text-secondary);
-
-      &:hover {
-        background: var(--color-bg-tertiary);
-        color: var(--color-text-primary);
-      }
-    }
-
-    &.btn-primary {
-      background: var(--color-brand-primary);
-      color: var(--color-white);
-
-      &:hover {
-        background: var(--color-brand-primary-hover);
-        transform: translateY(-1px);
-        box-shadow: var(--shadow-brand);
-      }
-
-      &:active {
-        transform: translateY(0);
       }
     }
   }

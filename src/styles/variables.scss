@@ -193,10 +193,10 @@
   --z-dropdown: 100;
   --z-sticky: 200;
   --z-fixed: 300;
-  --z-modal-backdrop: 400;
-  --z-modal: 500;
-  --z-popover: 600;
-  --z-tooltip: 700;
+  --z-modal-backdrop: 1000;
+  --z-modal: 1100;
+  --z-popover: 1200;
+  --z-tooltip: 1300;
 
   // ============================================
   // Legacy Support (for gradual migration)
@@ -205,27 +205,6 @@
   --color-primary-hover: var(--color-brand-primary-hover);
   --color-secondary: var(--color-brand-secondary);
   --color-accent: var(--color-brand-accent);
-}
-
-// ============================================
-// Dark Mode Support (optional)
-// ============================================
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg-primary: #1a1a1a;
-    --color-bg-secondary: #262626;
-    --color-bg-tertiary: #404040;
-    --color-surface: #262626;
-    --color-surface-hover: #404040;
-    --color-surface-active: #525252;
-
-    --color-text-primary: #fafafa;
-    --color-text-secondary: #d4d4d4;
-    --color-text-tertiary: #a3a3a3;
-
-    --color-border-primary: #404040;
-    --color-border-secondary: #525252;
-  }
 }
 
 // ============================================

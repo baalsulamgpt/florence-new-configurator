@@ -28,7 +28,7 @@ export class ProjectsPageComponent implements OnInit {
   currentShareProject: Project | null = null;
 
   // View mode: 'grid' or 'table'
-  viewMode: 'grid' | 'table' = 'grid';
+  viewMode: 'grid' | 'table' = 'table';
   private readonly VIEW_MODE_KEY = 'projects_view_mode';
 
   // User menu
