@@ -1,0 +1,16 @@
+{
+  "hosting": {
+    "public": "dist/florence-4c-configurator/browser",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

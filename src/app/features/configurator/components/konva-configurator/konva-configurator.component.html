@@ -1,49 +1,184 @@
 <div class="konva-page">
-  <!-- Main Header (60px) -->
+  <!-- Main Header (Two rows on mobile) -->
   <header class="main-header">
       <div class="header-content">
-          <img class="florence-logo" src="https://mailboxconfigurator.com/sites/default/files/florence_logo_0.png" alt="Florence Logo">
-          <div class="project-title-section">
-              <span class="project-title" *ngIf="!editingProjectName; else editNameTemplate">{{ currentProject?.name || 'Unnamed Project' }}</span>
-              <ng-template #editNameTemplate>
-                  <input
-                      #projectNameInput
-                      type="text"
-                      class="project-title-input"
-                      [value]="currentProject?.name || 'Unnamed Project'"
-                      (blur)="finishEditingProjectName()"
-                      (keydown.enter)="finishEditingProjectName()"
-                      (keydown.escape)="cancelEditingProjectName()"
-                      (click)="$event.stopPropagation()"
-                  />
-              </ng-template>
-              <button class="btn-edit-title" (click)="startEditingProjectName()" title="Edit project name">
+          <!-- Row 1: Logo, Avatar, Tools Button -->
+          <div class="header-row-1">
+              <img class="florence-logo" src="https://mailboxconfigurator.com/sites/default/files/florence_logo_0.png" alt="Florence Logo">
+
+              <div class="project-title-section desktop-only">
+                  <span class="project-title" *ngIf="!editingProjectName; else editNameTemplate">{{ currentProject?.name || 'Unnamed Project' }}</span>
+                  <ng-template #editNameTemplate>
+                      <input
+                          type="text"
+                          class="project-title-input"
+                          [(ngModel)]="editingProjectNameValue"
+                          (blur)="finishEditingProjectName()"
+                          (keydown.enter)="finishEditingProjectName()"
+                          (keydown.escape)="cancelEditingProjectName()"
+                          (click)="$event.stopPropagation()"
+                      />
+                  </ng-template>
+                  <button class="btn-edit-title" (click)="startEditingProjectName()" title="Edit project name">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                      </svg>
+                  </button>
+              </div>
+
+              <div class="spacer"></div>
+
+              <!-- Desktop Action Buttons -->
+              <div class="desktop-actions">
+                  <button class="header-btn" (click)="openProjectSettings()">
+                      <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <circle cx="12" cy="12" r="3"/>
+                          <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m5.08 5.08l4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08-5.08l4.24-4.24"/>
+                      </svg>
+                      <span>Project Settings</span>
+                  </button>
+
+                  <button class="header-btn">
+                      <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                      </svg>
+                      <span>Comments</span>
+                  </button>
+
+                  <button class="header-btn">
+                      <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                          <polyline points="14 2 14 8 20 8"/>
+                          <path d="M12 18v-6"/>
+                          <path d="M9 15h6"/>
+                      </svg>
+                      <span>Create PDF</span>
+                  </button>
+
+                  <button class="header-btn">
+                      <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M12 3l8 4.5v9l-8 4-8-4v-9z"/>
+                          <path d="M12 12l8-4.5"/>
+                          <path d="M12 12v8"/>
+                          <path d="M12 12L4 7.5"/>
+                      </svg>
+                      <span>Create Revit Model</span>
+                  </button>
+
+                  <button class="header-btn" (click)="openShareModal()">
+                      <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <circle cx="18" cy="5" r="3"/>
+                          <circle cx="6" cy="12" r="3"/>
+                          <circle cx="18" cy="19" r="3"/>
+                          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                      </svg>
+                      <span>Share</span>
+                  </button>
+              </div>
+
+              <!-- User Avatar Menu -->
+              <div class="user-menu-container">
+                  <button class="user-avatar-btn" (click)="toggleUserMenu()">
+                      <span class="user-initials">{{ getUserInitials() }}</span>
+                      <svg class="dropdown-arrow" [class.rotated]="isUserMenuOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <polyline points="6 9 12 15 18 9"/>
+                      </svg>
+                  </button>
+
+                  <div class="user-dropdown" *ngIf="isUserMenuOpen" (click)="$event.stopPropagation()">
+                      <div class="user-info">
+                          <span class="user-email">{{ currentUserEmail }}</span>
+                          <span class="user-role">Administrator</span>
+                      </div>
+                      <div class="dropdown-divider"></div>
+                      <button class="dropdown-item" (click)="goToProjects()">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                              <polyline points="9 22 9 12 15 12 15 22"/>
+                          </svg>
+                          <span>Back to All Projects</span>
+                      </button>
+                      <div class="dropdown-divider"></div>
+                      <button class="dropdown-item" (click)="onLogout()">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                              <polyline points="16 17 21 12 16 7"/>
+                              <line x1="21" y1="12" x2="9" y2="12"/>
+                          </svg>
+                          <span>Logout</span>
+                      </button>
+                  </div>
+              </div>
+
+              <!-- Mobile Tools Button -->
+              <button class="mobile-tools-btn" (click)="toggleMobileMenu()">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                      <line x1="3" y1="12" x2="21" y2="12"/>
+                      <line x1="3" y1="6" x2="21" y2="6"/>
+                      <line x1="3" y1="18" x2="21" y2="18"/>
                   </svg>
+                  <span>Tools</span>
               </button>
           </div>
 
-          <div class="spacer"></div>
+          <!-- Row 2: Project Title -->
+          <div class="header-row-2">
+              <div class="project-title-section mobile-only">
+                  <span class="project-title" *ngIf="!editingProjectName; else editNameTemplate">{{ currentProject?.name || 'Unnamed Project' }}</span>
+                  <ng-template #editNameTemplate>
+                      <input
+                          type="text"
+                          class="project-title-input"
+                          [(ngModel)]="editingProjectNameValue"
+                          (blur)="finishEditingProjectName()"
+                          (keydown.enter)="finishEditingProjectName()"
+                          (keydown.escape)="cancelEditingProjectName()"
+                          (click)="$event.stopPropagation()"
+                      />
+                  </ng-template>
+                  <button class="btn-edit-title" (click)="startEditingProjectName()" title="Edit project name">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                      </svg>
+                  </button>
+              </div>
+          </div>
+      </div>
+  </header>
 
-          <button class="header-btn" (click)="openProjectSettings()">
-              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu-overlay" *ngIf="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" [class.open]="isMobileMenuOpen">
+      <div class="mobile-menu-header">
+          <span class="mobile-menu-title">Menu</span>
+          <button class="mobile-menu-close" (click)="closeMobileMenu()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+          </button>
+      </div>
+      <div class="mobile-menu-content">
+          <button class="mobile-menu-item" (click)="openProjectSettings(); closeMobileMenu()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="12" cy="12" r="3"/>
                   <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m5.08 5.08l4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08-5.08l4.24-4.24"/>
               </svg>
               <span>Project Settings</span>
           </button>
-
-          <button class="header-btn">
-              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <button class="mobile-menu-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
               </svg>
               <span>Comments</span>
           </button>
-
-          <button class="header-btn">
-              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <button class="mobile-menu-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                   <polyline points="14 2 14 8 20 8"/>
                   <path d="M12 18v-6"/>
@@ -51,9 +186,8 @@
               </svg>
               <span>Create PDF</span>
           </button>
-
-          <button class="header-btn">
-              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <button class="mobile-menu-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M12 3l8 4.5v9l-8 4-8-4v-9z"/>
                   <path d="M12 12l8-4.5"/>
                   <path d="M12 12v8"/>
@@ -61,9 +195,8 @@
               </svg>
               <span>Create Revit Model</span>
           </button>
-
-          <button class="header-btn" (click)="openShareModal()">
-              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <button class="mobile-menu-item" (click)="openShareModal(); closeMobileMenu()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="18" cy="5" r="3"/>
                   <circle cx="6" cy="12" r="3"/>
                   <circle cx="18" cy="19" r="3"/>
@@ -72,42 +205,8 @@
               </svg>
               <span>Share</span>
           </button>
-
-          <!-- User Avatar Menu -->
-          <div class="user-menu-container">
-              <button class="user-avatar-btn" (click)="toggleUserMenu()">
-                  <span class="user-initials">{{ getUserInitials() }}</span>
-                  <svg class="dropdown-arrow" [class.rotated]="isUserMenuOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <polyline points="6 9 12 15 18 9"/>
-                  </svg>
-              </button>
-
-              <div class="user-dropdown" *ngIf="isUserMenuOpen" (click)="$event.stopPropagation()">
-                  <div class="user-info">
-                      <span class="user-email">{{ currentUserEmail }}</span>
-                      <span class="user-role">Administrator</span>
-                  </div>
-                  <div class="dropdown-divider"></div>
-                  <button class="dropdown-item" (click)="goToProjects()">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                          <polyline points="9 22 9 12 15 12 15 22"/>
-                      </svg>
-                      <span>Back to All Projects</span>
-                  </button>
-                  <div class="dropdown-divider"></div>
-                  <button class="dropdown-item" (click)="onLogout()">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                          <polyline points="16 17 21 12 16 7"/>
-                          <line x1="21" y1="12" x2="9" y2="12"/>
-                      </svg>
-                      <span>Logout</span>
-                  </button>
-              </div>
-          </div>
       </div>
-  </header>
+  </div>
 
   <div class="canvas-area">
       <!-- Canvas Info Panel -->
@@ -119,27 +218,62 @@
               </svg>
               <span class="breadcrumb-wall">{{ activeWallName }}</span>
           </div>
-          <div class="stats-section">
-              <span class="stat-item"><span class="stat-dot"></span>Tenants: {{ canvasStats.tenantCabinets }}</span>
+          <div class="stats-section" [class.panel-open]="rightPanelVisible">
+              <span class="stat-item"><span class="stat-dot"></span>Mailboxes: {{ canvasStats.tenantCabinets }}</span>
               <span class="stat-item"><span class="stat-dot"></span>Parcels: {{ canvasStats.parcelCabinets }}</span>
-              <span class="stat-item"><span class="stat-dot"></span>Size: {{ canvasStats.maxWidth }}" × {{ canvasStats.maxHeight }}"</span>
+              <span class="stat-item"><span class="stat-dot"></span>O.A.: {{ canvasStats.maxWidth }} × {{ canvasStats.maxHeight }}</span>
+              <span class="stat-item"><span class="stat-dot"></span>R.O. MAX: {{ canvasStats.roMax }}</span>
+              <span class="stat-item"><span class="stat-dot"></span>R.O. MIN: {{ canvasStats.roMin }}</span>
+          </div>
+      </div>
+
+      <!-- Mobile Stats Panel - Bottom of screen, above footer -->
+      <div class="mobile-stats-panel" *ngIf="canvasStats">
+          <div class="stats-row">
+              <span class="stat-item">
+                  <span class="stat-dot"></span>
+                  Mailboxes: {{ canvasStats.tenantCabinets }}
+              </span>
+              <span class="stat-item">
+                  <span class="stat-dot"></span>
+                  Parcels: {{ canvasStats.parcelCabinets }}
+              </span>
+          </div>
+          <div class="stats-row">
+              <span class="stat-item">
+                  <span class="stat-dot"></span>
+                  O.A.: {{ canvasStats.maxWidth }} × {{ canvasStats.maxHeight }}
+              </span>
+          </div>
+          <div class="stats-row">
+              <span class="stat-item">
+                  <span class="stat-dot"></span>
+                  R.O. MAX: {{ canvasStats.roMax }}
+              </span>
+              <span class="stat-item">
+                  <span class="stat-dot"></span>
+                  R.O. MIN: {{ canvasStats.roMin }}
+              </span>
+          </div>
+      </div>
+
+      <!-- Empty Wall Hint -->
+      <div class="empty-wall-hint" *ngIf="isWallEmpty">
+          <div class="hint-content">
+              <svg class="hint-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/>
+                  <line x1="9" y1="3" x2="9" y2="21"/>
+                  <path d="M9 12h6m-3 3h3m-3-6h3"/>
+              </svg>
+              <div class="hint-text">
+                  <p class="hint-title">No cabinets yet</p>
+                  <p class="hint-description">Press the <strong>Cabinets</strong> button below, then drag and drop cabinets onto the canvas</p>
+              </div>
+              <div class="hint-arrow"></div>
           </div>
       </div>
 
       <div #container class="konva-container">
-        <input #inlineInput
-             type="text"
-             class="inline-editor"
-             placeholder="Enter #"
-             [style.top.px]="inputPosition.y"
-             [style.left.px]="inputPosition.x"
-             [style.width.px]="inputPosition.width"
-             [style.height.px]="inputPosition.height"
-             [style.display]="editingDoor ? 'block' : 'none'"
-             [(ngModel)]="inputValue"
-             (blur)="finishEditing()"
-             (keydown.enter)="finishEditing()"
-             (keydown.escape)="cancelEditing()">
       </div>
   </div>
 
@@ -321,7 +455,7 @@
                                           <span class="stat-value">{{ stats.totalCabinets }}</span>
                                       </div>
                                       <div class="stat-row">
-                                          <span class="stat-label">Tenants:</span>
+                                          <span class="stat-label">Mailboxes:</span>
                                           <span class="stat-value">
                                               {{ stats.tenantCabinets }}
                                               <span class="stat-badge" *ngIf="stats.tenantRange">{{ stats.tenantRange }}</span>
@@ -335,8 +469,16 @@
                                           </span>
                                       </div>
                                       <div class="stat-row">
-                                          <span class="stat-label">Size:</span>
-                                          <span class="stat-value">{{ stats.maxWidth }}" × {{ stats.maxHeight }}"</span>
+                                          <span class="stat-label">O.A.:</span>
+                                          <span class="stat-value">{{ stats.maxWidth }} × {{ stats.maxHeight }}</span>
+                                      </div>
+                                      <div class="stat-row">
+                                          <span class="stat-label">R.O. MAX:</span>
+                                          <span class="stat-value">{{ stats.roMax }}</span>
+                                      </div>
+                                      <div class="stat-row">
+                                          <span class="stat-label">R.O. MIN:</span>
+                                          <span class="stat-value">{{ stats.roMin }}</span>
                                       </div>
                                   </ng-container>
                               </div>
@@ -363,7 +505,13 @@
   <!-- Cabinets Preview Footer (3rd from bottom) -->
   <div class="cabinets-preview-footer" *ngIf="isCabinetsMode">
       <div class="cabinets-preview-content">
-          <div *ngFor="let cabinet of getSelectedCabinets()" class="cabinet-preview-card" draggable="true" (dragstart)="onDragStart($event, cabinet)">
+          <div *ngFor="let cabinet of getSelectedCabinets()" 
+               class="cabinet-preview-card" 
+               draggable="true" 
+               (dragstart)="onDragStart($event, cabinet)"
+               (touchstart)="onTouchStart($event, cabinet)"
+               (touchmove)="onTouchMove($event)"
+               (touchend)="onTouchEnd($event)">
               <svg class="cabinet-preview-svg"
                    [attr.viewBox]="getCabinetViewBox(cabinet)"
                    [attr.width]="getCabinetViewBox(cabinet).split(' ')[2]"
@@ -507,7 +655,10 @@
                   class="cabinet-group-btn"
                   [class.active]="selectedCabinetHeight === group.rows"
                   (click)="selectCabinetHeight(group.rows)">
-              <span class="cabinet-group-rows">{{ group.rows }} Rows</span>
+              <span class="cabinet-group-rows">
+                <span class="rows-number">{{ group.rows }}</span>
+                <span class="rows-text"> Rows</span>
+              </span>
               <span class="cabinet-group-height">{{ group.height.toFixed(1) }}"</span>
           </button>
       </div>
@@ -518,7 +669,7 @@
       <div class="numbering-footer-content">
           <div class="numbering-inputs">
               <div class="numbering-input-group">
-                  <label>Tenants from:</label>
+                  <label>Mailboxes from:</label>
                   <input type="number" [(ngModel)]="tenantStart" class="numbering-input">
               </div>
               <div class="numbering-input-group">

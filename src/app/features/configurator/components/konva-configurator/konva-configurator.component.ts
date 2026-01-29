@@ -68,8 +68,7 @@ const STARTER_MIN_DEFAULT = [
 })
 export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('container') containerRef!: ElementRef;
-  @ViewChild('inlineInput') inlineInput!: ElementRef;
-  
+
   private stage!: Konva.Stage;
   private layer!: Konva.Layer;
   private gridLayer!: Konva.Layer;
@@ -105,6 +104,7 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
   private hoverRect: Konva.Rect | null = null;
   private duplicateButton: Konva.Group | null = null;
   private editButton: Konva.Group | null = null;
+  private deleteButton: Konva.Group | null = null;
 
   // Editor Modal
   isEditorOpen = false;
@@ -115,11 +115,6 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
   nextNumber = 1;
   tenantStart = 1;
   parcelStart = 1;
-  
-  // Inline Editing
-  editingDoor: { frameId: string, door: Door } | null = null;
-  inputPosition = { x: 0, y: 0, width: 0, height: 0 };
-  inputValue = '';
 
   // Cabinet Color - using shared constants
   cabinetColors = CABINET_COLORS;
@@ -149,7 +144,7 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
   // Project
   currentProject: Project | null = null;
   editingProjectName = false;
-  @ViewChild('projectNameInput') projectNameInput!: ElementRef;
+  editingProjectNameValue = '';
   isProjectSettingsOpen = false;
   stateChangeSubscription?: Subscription;
   routerSubscription?: Subscription;
@@ -158,13 +153,23 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
   isUserMenuOpen = false;
   currentUserEmail = 'user@example.com'; // TODO: Get from Drupal/session
 
+  // Mobile menu
+  isMobileMenuOpen = false;
+
   // Share modal
   isShareModalOpen = false;
   currentShareProject: Project | null = null;
 
   // Canvas Info Panel
-  canvasStats: { tenantCabinets: number; parcelCabinets: number; maxWidth: number; maxHeight: number } | null = null;
+  canvasStats: { tenantCabinets: number; parcelCabinets: number; maxWidth: string; maxHeight: string; roMin: string; roMax: string } | null = null;
   private activeWallSubscription?: Subscription;
+
+  // Check if wall has no cabinets (frames)
+  get isWallEmpty(): boolean {
+    const wall = this.stateService.getActiveWall();
+    if (!wall) return true; // Consider empty if no wall selected
+    return !wall.frames || wall.frames.length === 0;
+  }
 
   private resizeHandler = () => this.handleResize();
   private keydownHandler = (e: KeyboardEvent) => this.handleKeyDown(e);
@@ -592,11 +597,36 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
       this.stage.width(this.width);
       this.stage.height(this.height);
 
-      // Recalculate floor Y - position floor 100px below center
-      this.floorY = (this.height / 2) + 100;
+      // Recalculate floor Y - offset from center of WINDOW (not container)
+      const isMobile = window.innerWidth <= 767;
+      let floorOffset: number;
+      if (!isMobile) {
+        floorOffset = 100;
+      } else if (window.innerWidth <= 375) {
+        floorOffset = 500; // SE and smaller
+      } else {
+        floorOffset = 350; // XR and larger mobile
+      }
+      this.floorY = (window.innerHeight / 2) + floorOffset;
+      console.log('Resize: isMobile=', isMobile, 'window.innerWidth=', window.innerWidth, 'window.innerHeight=', window.innerHeight, 'floorY=', this.floorY);
+
+      // Update scale for mobile (graduated)
+      let scale: number;
+      if (!isMobile) {
+        scale = 0.75;
+      } else if (window.innerWidth <= 375) {
+        scale = 0.3; // SE and smaller
+      } else if (window.innerWidth <= 420) {
+        scale = 0.5; // XR and similar
+      } else {
+        scale = 0.75;
+      }
+      this.stage.scale({ x: scale, y: scale });
 
       // Keep stage positioned to show left labels
-      this.stage.position({ x: 150, y: 0 });
+      const stageX = isMobile ? (window.innerWidth <= 374 ? 10 : 150) : 150;
+      const stageY = 0;
+      this.stage.position({ x: stageX, y: stageY });
 
       this.drawGrid();
 
@@ -668,10 +698,7 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
               this.isCabinetsMode = false;
           }
       }
-      const wall = this.stateService.getActiveWall();
-      if (wall) {
-          this.renderFrames(wall.frames);
-      }
+      // No need to re-render frames in numbering mode since we're not editing individual doors
   }
 
   toggleCabinetsMode() {
@@ -919,21 +946,23 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
       const stats = {
           tenantCabinets: 0,
           parcelCabinets: 0,
-          maxWidth: 0,
-          maxHeight: 0
+          maxWidth: '',
+          maxHeight: '',
+          roMin: '',
+          roMax: ''
       };
+
+      let maxWidthNum = 0;
+      let maxHeightNum = 0;
 
       wall.frames.forEach((frame: Frame) => {
           // Accumulate dimensions
-          stats.maxWidth += frame.width;
-          if (frame.height > stats.maxHeight) {
-              stats.maxHeight = frame.height;
+          maxWidthNum += frame.width;
+          if (frame.height > maxHeightNum) {
+              maxHeightNum = frame.height;
           }
 
-          // Count cabinets by door type
-          let hasTenant = false;
-          let hasParcel = false;
-
+          // Count individual doors (not cabinets)
           frame.doors?.forEach((door: Door) => {
               const doorType = (door.door_type || '').toLowerCase();
 
@@ -948,28 +977,82 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
                                    doorType.startsWith('hop') || doorType.startsWith('td');
 
               if (isParcelDoor) {
-                  hasParcel = true;
+                  stats.parcelCabinets++;
               } else {
-                  hasTenant = true;
+                  stats.tenantCabinets++;
               }
           });
+      });
 
-          // Count cabinet based on what doors it contains
-          if (hasParcel && !hasTenant) {
-              stats.parcelCabinets++;
-          } else if (hasTenant && !hasParcel) {
-              stats.tenantCabinets++;
+      // Format dimensions with fractions
+      stats.maxWidth = this.formatInches(maxWidthNum);
+      stats.maxHeight = this.formatInches(maxHeightNum);
+
+      // Calculate RO MIN and RO MAX
+      let singleColumnCount = 0;
+      let doubleColumnCount = 0;
+
+      wall.frames.forEach((frame: Frame) => {
+          const hasRightColumn = frame.doors?.some(d => d.column === 'right');
+          if (hasRightColumn) {
+              doubleColumnCount++;
           } else {
-              // Mixed cabinet - count in both
-              stats.tenantCabinets++;
-              if (hasParcel) {
-                  stats.parcelCabinets++;
-              }
+              singleColumnCount++;
           }
       });
 
+      const overallWidth = maxWidthNum;
+      let roMaxDeduction = 0;
+      let roMinDeduction = 0;
+
+      if (doubleColumnCount > 0 && singleColumnCount === 0) {
+          // Double column units only
+          roMaxDeduction = 15 / 16; // 0.9375"
+          roMinDeduction = 1 + 3 / 16; // 1.1875"
+      } else if (singleColumnCount > 0 && doubleColumnCount === 0) {
+          // Single column units only
+          roMaxDeduction = 1;
+          roMinDeduction = 1 + 1 / 4; // 1.25"
+      } else {
+          // Mixed single and double column units
+          roMaxDeduction = 31 / 32; // 0.96875"
+          roMinDeduction = 1 + 7 / 32; // 1.21875"
+      }
+
+      stats.roMax = this.formatInches(overallWidth - roMaxDeduction);
+      stats.roMin = this.formatInches(overallWidth - roMinDeduction);
+
       this.canvasStats = stats;
       this.cdr.detectChanges();
+  }
+
+  private formatInches(value: number): string {
+      const whole = Math.floor(value);
+      const fraction = value - whole;
+      const fractionDenominators = [32, 16, 8, 4, 2];
+
+      // Find the best fraction representation
+      for (const denom of fractionDenominators) {
+          const numer = Math.round(fraction * denom);
+          if (Math.abs(numer / denom - fraction) < 0.01) {
+              if (numer === 0) {
+                  return `${whole}"`;
+              } else if (numer === 1 && denom === 2) {
+                  return `${whole} 1/2"`;
+              } else if (denom === 4) {
+                  return `${whole} ${numer}/4"`;
+              } else if (denom === 8) {
+                  return `${whole} ${numer}/8"`;
+              } else if (denom === 16) {
+                  return `${whole} ${numer}/16"`;
+              } else if (denom === 32) {
+                  return `${whole} ${numer}/32"`;
+              }
+          }
+      }
+
+      // Fallback to decimal
+      return `${value.toFixed(2)}"`;
   }
 
   updateAutoNumbering() {
@@ -1078,13 +1161,122 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
       }
   }
 
+  // Touch drag support for mobile
+  private touchDraggedCabinet: FrameDefinition | null = null;
+  private touchDragClone: HTMLElement | null = null;
+
+  onTouchStart(event: TouchEvent, cabinet: FrameDefinition) {
+      this.touchDraggedCabinet = cabinet;
+      
+      // Create visual clone for dragging
+      const target = event.target as HTMLElement;
+      const card = target.closest('.cabinet-preview-card') as HTMLElement;
+      if (card) {
+          const clone = card.cloneNode(true) as HTMLElement;
+          clone.style.position = 'fixed';
+          clone.style.pointerEvents = 'none';
+          clone.style.opacity = '0.8';
+          clone.style.zIndex = '10000';
+          clone.style.transform = 'scale(1.1)';
+          clone.style.transition = 'none';
+          
+          const touch = event.touches[0];
+          const rect = card.getBoundingClientRect();
+          clone.style.left = `${touch.clientX - rect.width / 2}px`;
+          clone.style.top = `${touch.clientY - rect.height / 2}px`;
+          clone.style.width = `${rect.width}px`;
+          
+          document.body.appendChild(clone);
+          this.touchDragClone = clone;
+          
+          // Add visual feedback to original
+          card.style.opacity = '0.3';
+      }
+      
+      event.preventDefault();
+  }
+
+  onTouchMove(event: TouchEvent) {
+      if (this.touchDraggedCabinet && this.touchDragClone) {
+          event.preventDefault();
+          
+          const touch = event.touches[0];
+          const rect = this.touchDragClone.getBoundingClientRect();
+          this.touchDragClone.style.left = `${touch.clientX - rect.width / 2}px`;
+          this.touchDragClone.style.top = `${touch.clientY - rect.height / 2}px`;
+      }
+  }
+
+  onTouchEnd(event: TouchEvent) {
+      if (!this.touchDraggedCabinet) return;
+
+      const touch = event.changedTouches[0];
+      const container = this.containerRef.nativeElement;
+      const rect = container.getBoundingClientRect();
+
+      // Check if touch ended within canvas
+      if (touch.clientX >= rect.left && touch.clientX <= rect.right &&
+          touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
+          
+          // Simulate drop on canvas
+          const cabinet = this.touchDraggedCabinet;
+          
+          // Calculate position relative to stage
+          const x = touch.clientX - rect.left;
+          const y = touch.clientY - rect.top;
+          
+          // Convert screen position to stage position
+          const transform = this.stage.getAbsoluteTransform().copy();
+          transform.invert();
+          const pos = transform.point({ x, y });
+          
+          // Find insertion index based on position
+          const otherGroups = this.layer.getChildren(node => 
+              node instanceof Konva.Group && node.attrs.frameIndex !== undefined
+          ).sort((a, b) => a.x() - b.x());
+          
+          let insertIndex = otherGroups.length;
+          for (let i = 0; i < otherGroups.length; i++) {
+              const other = otherGroups[i];
+              if (pos.x < other.x() + (other.width() / 2)) {
+                  insertIndex = i;
+                  break;
+              }
+          }
+          
+          this.addCabinetToWall(cabinet, insertIndex);
+      }
+
+      // Cleanup
+      if (this.touchDragClone) {
+          this.touchDragClone.remove();
+          this.touchDragClone = null;
+      }
+      
+      // Restore original card opacity
+      const cards = document.querySelectorAll('.cabinet-preview-card');
+      cards.forEach(card => (card as HTMLElement).style.opacity = '1');
+      
+      this.touchDraggedCabinet = null;
+  }
+
   private initKonva() {
     const container = this.containerRef.nativeElement;
     this.width = container.clientWidth;
     this.height = container.clientHeight;
 
-    // Position floor 100px below center of screen
-    this.floorY = (this.height / 2) + 100;
+    // Position floor - offset from center of WINDOW (not container)
+    const isMobile = window.innerWidth <= 767;
+    let floorOffset: number;
+    if (!isMobile) {
+      floorOffset = 100;
+    } else if (window.innerWidth <= 375) {
+      floorOffset = 500; // SE and smaller
+    } else {
+      floorOffset = 350; // XR and larger mobile
+    }
+    this.floorY = (window.innerHeight / 2) + floorOffset;
+    console.log('Init: isMobile=', isMobile, 'window.innerWidth=', window.innerWidth, 'window.innerHeight=', window.innerHeight, 'floorY=', this.floorY);
 
     this.stage = new Konva.Stage({
       container: container,
@@ -1094,11 +1286,23 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
       draggable: true // Allow panning stage
     });
 
-    // Set initial scale to 0.75 (adjusted for SCALE=6, keeps same view as before)
-    this.stage.scale({ x: 0.75, y: 0.75 });
+    // Set initial scale (graduated for different screen sizes)
+    let scale: number;
+    if (!isMobile) {
+      scale = 0.75;
+    } else if (window.innerWidth <= 375) {
+      scale = 0.3; // SE and smaller
+    } else if (window.innerWidth <= 420) {
+      scale = 0.5; // XR and similar
+    } else {
+      scale = 0.75;
+    }
+    this.stage.scale({ x: scale, y: scale });
 
-    // Shift stage right to accommodate left side labels (~150px)
-    this.stage.position({ x: 150, y: 0 });
+    // Shift stage right to accommodate left side labels (~150px on desktop, less on mobile)
+    const stageX = isMobile ? (window.innerWidth <= 374 ? 10 : 150) : 150;
+    const stageY = 0;
+    this.stage.position({ x: stageX, y: stageY });
 
     this.gridLayer = new Konva.Layer();
     this.layer = new Konva.Layer();
@@ -1129,7 +1333,6 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
             } else {
                 this.selectedFrameId = null;
                 this.updateSelection();
-                this.finishEditing();
             }
         }
     });
@@ -1200,11 +1403,10 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
     });
 
     this.stage.on('dragstart', () => {
-        this.finishEditing();
+        // Cancel any active operation on drag
     });
-    
+
     this.stage.on('wheel', (e) => {
-        this.finishEditing();
         e.evt.preventDefault();
         const scaleBy = 1.05;
         const oldScale = this.stage.scaleX();
@@ -1252,9 +1454,24 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
   }
 
   private resetView() {
-      // Reset to initial position and scale (0.75 because SCALE=6)
-      this.stage.scale({ x: 0.75, y: 0.75 });
-      this.stage.position({ x: 150, y: 0 });
+      // Reset to initial position and scale
+      const isMobile = window.innerWidth <= 767;
+      let scale: number;
+      if (!isMobile) {
+        scale = 0.75;
+      } else if (window.innerWidth <= 375) {
+        scale = 0.3; // SE and smaller
+      } else if (window.innerWidth <= 420) {
+        scale = 0.5; // XR and similar
+      } else {
+        scale = 0.75;
+      }
+      this.stage.scale({ x: scale, y: scale });
+      
+      // Adjust position based on screen size
+      const stageX = isMobile ? (window.innerWidth <= 374 ? 10 : 150) : 150;
+      const stageY = 0;
+      this.stage.position({ x: stageX, y: stageY });
   }
 
   private handleDrop(e: DragEvent) {
@@ -1533,9 +1750,10 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
       const buttonSize = 26;
       const buttonGap = 8;
       const buttonY = y - buttonSize - 6;
+      const center = buttonSize / 2;
 
       // Edit button (left)
-      const editButtonX = x + width - (buttonSize * 2) - buttonGap - 6;
+      const editButtonX = x + width - (buttonSize * 3) - (buttonGap * 2) - 6;
 
       this.editButton = new Konva.Group({
           x: editButtonX,
@@ -1557,45 +1775,22 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
           listening: true
       });
 
-      // Edit icon (pencil)
-      const center = buttonSize / 2;
-      const pencilSize = 10;
-      const offsetX = center - pencilSize / 2;
-      const offsetY = center - pencilSize / 2 + 1;
-
-      // Pencil body
-      const pencilBody = new Konva.Rect({
-          x: offsetX + 3,
-          y: offsetY + 6,
-          width: pencilSize - 4,
-          height: 3,
+      // Edit icon - pencil emoji
+      const pencilIcon = new Konva.Text({
+          x: center,
+          y: center,
+          text: '✏️',
+          fontSize: 15,
+          fontFamily: 'Segoe UI Emoji, Apple Color Emoji, Arial',
           fill: '#fff',
-          rotation: -45,
-          listening: false
+          listening: false,
+          offsetX: 10,
+          offsetY: 8.5
       });
 
-      // Pencil tip
-      const pencilTip = new Konva.Line({
-          points: [offsetX + 3, offsetY + 9, offsetX, offsetY + 12],
-          stroke: '#fff',
-          strokeWidth: 2,
-          lineCap: 'round',
-          listening: false
-      });
+      this.editButton.add(editBg, pencilIcon);
 
-      // Pencil top
-      const pencilTop = new Konva.Rect({
-          x: offsetX + 5,
-          y: offsetY + 4,
-          width: 3,
-          height: 2,
-          fill: '#fff',
-          listening: false
-      });
-
-      this.editButton.add(editBg, pencilBody, pencilTip, pencilTop);
-
-      this.editButton.on('click', (e) => {
+      this.editButton.on('click tap', (e) => {
           e.cancelBubble = true;
           this.ngZone.run(() => {
               this.openCabinetEditor();
@@ -1615,6 +1810,65 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
       });
 
       this.selectionLayer.add(this.editButton);
+
+      // Delete button (middle)
+      const deleteButtonX = x + width - (buttonSize * 2) - buttonGap - 6;
+
+      this.deleteButton = new Konva.Group({
+          x: deleteButtonX,
+          y: buttonY,
+          listening: true
+      });
+
+      const deleteBg = new Konva.Circle({
+          x: buttonSize / 2,
+          y: buttonSize / 2,
+          radius: buttonSize / 2,
+          fill: '#dc3545',
+          stroke: '#fff',
+          strokeWidth: 1.5,
+          shadowColor: 'rgba(0,0,0,0.3)',
+          shadowBlur: 3,
+          shadowOffset: { x: 0, y: 1 },
+          shadowOpacity: 0.4,
+          listening: true
+      });
+
+      // Delete icon - trash emoji
+      const trashIcon = new Konva.Text({
+          x: center,
+          y: center,
+          text: '🗑️',
+          fontSize: 15,
+          fontFamily: 'Segoe UI Emoji, Apple Color Emoji, Arial',
+          fill: '#fff',
+          listening: false,
+          offsetX: 10,
+          offsetY: 8.5
+      });
+
+      this.deleteButton.add(deleteBg, trashIcon);
+
+      this.deleteButton.on('click tap', (e) => {
+          e.cancelBubble = true;
+          this.ngZone.run(() => {
+              this.deleteCabinet(this.selectedFrameId!);
+          });
+      });
+
+      this.deleteButton.on('mouseenter', () => {
+          this.stage.container().style.cursor = 'pointer';
+          deleteBg.fill('#c82333');
+          this.selectionLayer.batchDraw();
+      });
+
+      this.deleteButton.on('mouseleave', () => {
+          this.stage.container().style.cursor = 'default';
+          deleteBg.fill('#dc3545');
+          this.selectionLayer.batchDraw();
+      });
+
+      this.selectionLayer.add(this.deleteButton);
 
       // Duplicate button (right)
       const dupButtonX = x + width - buttonSize - 6;
@@ -1640,30 +1894,23 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
           listening: true
       });
 
-      // Plus icon
-      const plusLength = 8;
-      const plusWidth = 2.5;
-
-      const plusV = new Konva.Line({
-          points: [center, center - plusLength / 2, center, center + plusLength / 2],
-          stroke: '#fff',
-          strokeWidth: plusWidth,
-          lineCap: 'round',
-          listening: false
+      // Duplicate icon - copy emoji
+      const copyIcon = new Konva.Text({
+          x: center,
+          y: center,
+          text: '📋',
+          fontSize: 15,
+          fontFamily: 'Segoe UI Emoji, Apple Color Emoji, Arial',
+          fill: '#fff',
+          listening: false,
+          offsetX: 10,
+          offsetY: 8.5
       });
 
-      const plusH = new Konva.Line({
-          points: [center - plusLength / 2, center, center + plusLength / 2, center],
-          stroke: '#fff',
-          strokeWidth: plusWidth,
-          lineCap: 'round',
-          listening: false
-      });
-
-      this.duplicateButton.add(buttonBg, plusV, plusH);
+      this.duplicateButton.add(buttonBg, copyIcon);
 
       // Button click handler
-      this.duplicateButton.on('click', (e) => {
+      this.duplicateButton.on('click tap', (e) => {
           e.cancelBubble = true;
           this.ngZone.run(() => {
               this.duplicateCabinet(this.selectedFrameId!);
@@ -1766,6 +2013,26 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
       this.selectedFrameId = newFrame.id;
   }
 
+  private deleteCabinet(frameId: string) {
+      const activeWall = this.stateService.getActiveWall();
+      if (!activeWall || !activeWall.frames) return;
+
+      // Find the index of the frame to delete
+      const frameIndex = activeWall.frames.findIndex((f: Frame) => f.id === frameId);
+      if (frameIndex === -1) return;
+
+      // Create new frames array without the deleted frame
+      const frames = [...activeWall.frames];
+      frames.splice(frameIndex, 1);
+
+      // Update the wall
+      this.stateService.updateWallFrames(activeWall.wall_id, frames);
+
+      // Clear selection
+      this.selectedFrameId = null;
+      this.updateSelection();
+  }
+
   openCabinetEditor() {
       const activeWall = this.stateService.getActiveWall();
       if (!activeWall || !activeWall.frames || !this.selectedFrameId) return;
@@ -1815,8 +2082,8 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
       group.setAttr('frameIndex', index);
       group.setAttr('frameId', frame.id);
 
-      // Click handler - different behavior for measure mode vs normal mode
-      group.on('click', (e) => {
+      // Click/Tap handler - different behavior for measure mode vs normal mode
+      const handleSelectClick = (e: any) => {
           e.cancelBubble = true;
 
           if (this.isMeasuringMode) {
@@ -1833,7 +2100,10 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
               this.selectedFrameId = frame.id;
               this.updateSelection();
           }
-      });
+      };
+
+      group.on('click', handleSelectClick);
+      group.on('tap', handleSelectClick); // Add tap support for mobile
 
       // Hover events - show different things based on mode
       group.on('mouseenter', (e) => {
@@ -2004,31 +2274,6 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
                       scale: this.SCALE / 5 // Scale door elements proportionally to SCALE (5 was original)
                   }
               );
-
-              // Handle Door Click for Numbering
-              drawer.on('click', (e) => {
-                  if (this.isNumberingMode) {
-                      e.cancelBubble = true;
-                      this.ngZone.run(() => {
-                          this.startEditing(frame, door, drawer);
-                      });
-                  }
-              });
-
-              // Handle Hover Highlight in numbering mode
-              // Note: Main cabinet hover is handled by group mouseenter/mouseleave
-              // Here we only change cursor when hovering over doors in numbering mode
-              drawer.on('mouseenter', (e) => {
-                  if (this.isNumberingMode) {
-                      this.stage.container().style.cursor = 'text';
-                  }
-              });
-
-              drawer.on('mouseleave', (e) => {
-                  if (this.isNumberingMode) {
-                      this.stage.container().style.cursor = 'default';
-                  }
-              });
 
               group.add(drawer);
               // Ensure highlight is on top after adding to group?
@@ -2201,85 +2446,11 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
       });
 
       // Cache for performance with higher pixel ratio for better quality
-      // Disable cache if in numbering mode to allow child events
-      if (!this.isNumberingMode) {
-          group.cache({
-              pixelRatio: 3
-          });
-      }
+      group.cache({
+          pixelRatio: 3
+      });
 
       return group;
-  }
-
-  startEditing(frame: Frame, door: Door, drawer: Konva.Group) {
-      const pos = drawer.getAbsolutePosition();
-      // getAbsolutePosition returns coordinates relative to the stage container's top-left corner
-      // but NOT accounting for any scrolling of the window or parent elements?
-      // Wait, Konva stage is inside a div.
-      // pos.x/y are relative to the Konva Stage (canvas) top-left.
-      
-      const stageBox = this.containerRef.nativeElement.getBoundingClientRect();
-      const scale = this.stage.scaleX(); 
-      
-      // We need to position the input relative to the 'konva-container' which has position: relative
-      // So pos.x / pos.y should be correct if the stage fits perfectly.
-      // BUT if we panned the stage, pos accounts for that? 
-      // getAbsolutePosition() returns the position on the stage relative to stage origin?
-      // No, it returns position relative to stage top-left corner (including stage position/scale).
-      // So if stage.x = 100, shape.x = 10, absolute is 110.
-      
-      this.inputPosition = {
-          x: pos.x,
-          y: pos.y,
-          width: drawer.width() * scale,
-          height: drawer.height() * scale
-      };
-      
-      // Check if visible
-      console.log('Editing start:', this.inputPosition, door.label);
-
-      this.editingDoor = { frameId: frame.id, door };
-      this.inputValue = door.label || '';
-      
-      setTimeout(() => {
-          if (this.inlineInput) {
-              this.inlineInput.nativeElement.focus();
-              this.inlineInput.nativeElement.select();
-          }
-      });
-  }
-
-  finishEditing() {
-      if (!this.editingDoor) return;
-      
-      const { frameId, door } = this.editingDoor;
-      const newValue = this.inputValue;
-      
-      this.editingDoor = null; 
-      
-      const activeWall = this.stateService.getActiveWall();
-      if (!activeWall) return;
-
-      const frames = [...activeWall.frames];
-      const frameIndex = frames.findIndex(f => f.id === frameId);
-      if (frameIndex === -1) return;
-
-      const updatedFrame = { ...frames[frameIndex] };
-      updatedFrame.doors = updatedFrame.doors.map(d => {
-          // Compare by reference or properties if needed, but reference should work
-          // as long as we haven't mutated the array in between without render
-          if (d === door || (d.position === door.position && d.column === door.column)) {
-              return { ...d, label: newValue };
-          }
-          return d;
-      });
-      
-      frames[frameIndex] = updatedFrame;
-      this.stateService.updateWallFrames(activeWall.wall_id, frames);
-  }
-
-  cancelEditing() {
-      this.editingDoor = null;
   }
 
   // Cabinet Color Methods
@@ -2548,11 +2719,16 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
   }
 
   startEditingProjectName() {
+      this.editingProjectNameValue = this.currentProject?.name || 'Unnamed Project';
       this.editingProjectName = true;
       setTimeout(() => {
-          if (this.projectNameInput) {
-              this.projectNameInput.nativeElement.focus();
-              this.projectNameInput.nativeElement.select();
+          // Focus on the visible input (desktop or mobile)
+          const desktopInput = document.querySelector('.desktop-only .project-title-input') as HTMLInputElement;
+          const mobileInput = document.querySelector('.mobile-only .project-title-input') as HTMLInputElement;
+          const activeInput = mobileInput?.offsetParent ? mobileInput : desktopInput;
+          if (activeInput) {
+              activeInput.focus();
+              activeInput.select();
           }
       });
   }
@@ -2560,19 +2736,18 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
   finishEditingProjectName() {
       if (!this.editingProjectName || !this.currentProject) return;
 
-      const input = this.projectNameInput?.nativeElement;
-      if (input) {
-          const newName = input.value.trim() || 'Unnamed Project';
-          this.projectService.updateProject(this.currentProject.id, { name: newName });
-          this.currentProject.name = newName;
-      }
+      const newName = this.editingProjectNameValue.trim() || 'Unnamed Project';
+      this.projectService.updateProject(this.currentProject.id, { name: newName });
+      this.currentProject.name = newName;
 
       this.editingProjectName = false;
+      this.editingProjectNameValue = '';
       this.cdr.detectChanges();
   }
 
   cancelEditingProjectName() {
       this.editingProjectName = false;
+      this.editingProjectNameValue = '';
       this.cdr.detectChanges();
   }
 
@@ -2607,6 +2782,14 @@ export class KonvaConfiguratorComponent implements OnInit, AfterViewInit, OnDest
       console.log('Logout clicked');
       this.isUserMenuOpen = false;
       this.router.navigate(['/login']);
+  }
+
+  toggleMobileMenu() {
+      this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  closeMobileMenu() {
+      this.isMobileMenuOpen = false;
   }
 
   // Share modal methods
